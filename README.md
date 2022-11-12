@@ -16,3 +16,7 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
     - Marca y delimitar el mapa y la circulación de los autos, así como su dirección de flujo vial.
 -	Obstáculos
     - Evitados por los autos, alterando el camino que toman los autos para llegar a su destino. 
+
+### Pasos para ejecutar simulación
+
+...
