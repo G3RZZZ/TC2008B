@@ -7,12 +7,12 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
 
 ### Agentes involucrados en el proyecto:
 -	Auto
-  - El auto navega las calles del mapa, respetando los semáforos y la dirección de circulación, hasta llegar a su destino por el camino elegido.
+    - El auto navega las calles del mapa, respetando los semáforos y la dirección de circulación, hasta llegar a su destino por el camino elegido.
 -	Semáforo
-  - Alternando entre verde y rojo, señaliza el siga y el alto a los autos.
+    - Alternando entre verde y rojo, señaliza el siga y el alto a los autos.
 -	Destino
-  - Punto final que alcanza el auto para salir de la circulación del mapa.
+    - Punto final que alcanza el auto para salir de la circulación del mapa.
 -	Calle
-  - Marca y delimitar el mapa y la circulación de los autos, así como su dirección de flujo vial.
+    - Marca y delimitar el mapa y la circulación de los autos, así como su dirección de flujo vial.
 -	Obstáculos
-  - Evitados por los autos, alterando el camino que toman los autos para llegar a su destino. 
+    - Evitados por los autos, alterando el camino que toman los autos para llegar a su destino. 
