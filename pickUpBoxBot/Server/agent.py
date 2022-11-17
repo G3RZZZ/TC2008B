@@ -100,7 +100,7 @@ class RobotAgent(Agent):
       
       if self.previous_pos:
         pos = self.previous_pos.pop()
-        print(self.pos, pos)
+        self.previous_pos.insert(0, self.pos)
         self.model.grid.move_agent(self, pos)
         self.model.grid.move_agent(self.carry_box, pos)
 
