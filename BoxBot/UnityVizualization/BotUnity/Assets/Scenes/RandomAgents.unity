@@ -330,6 +330,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983bc179e80f15347a79dd7b044746e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentsData:
+    positions: []
+  obstacleData:
+    positions: []
   agentPrefab: {fileID: 993549348249905, guid: 563375cb179ab4d4d8c0ce2bfc651964, type: 3}
   obstaclePrefab: {fileID: 961990229689801968, guid: 0870e23a47df89e468e8af19c065fce0, type: 3}
   boxPrefab: {fileID: 3084395687958194139, guid: 0588a6d6f293cee46bc28257bb165fe1, type: 3}
@@ -339,7 +343,7 @@ MonoBehaviour:
   width: 28
   height: 28
   NTowers: 3
-  timeToUpdate: 2
+  timeToUpdate: 1
 --- !u!4 &1518653506
 Transform:
   m_ObjectHideFlags: 0
