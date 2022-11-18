@@ -43,7 +43,7 @@ public class AgentController : MonoBehaviour
     string getTowersEndpoint = "/getTowers";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
-    AgentsData agentsData, obstacleData;
+    public AgentsData agentsData, obstacleData;
     Dictionary<string, GameObject> agents;
     Dictionary<string, Vector3> prevPositions, currPositions;
 
@@ -200,6 +200,7 @@ public class AgentController : MonoBehaviour
                     {
                         prevPositions[agent.id] = newAgentPosition;
                         agents[agent.id] = Instantiate(boxPrefab, newAgentPosition, Quaternion.identity);
+                        agents[agent.id].name = agent.id;
                     }
                     else
                     {
