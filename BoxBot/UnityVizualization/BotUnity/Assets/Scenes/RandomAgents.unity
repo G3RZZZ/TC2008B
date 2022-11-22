@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 1518653505}
   m_Layer: 0
   m_Name: AgentController
-  m_TagString: Untagged
+  m_TagString: AgentController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -339,7 +339,7 @@ MonoBehaviour:
   boxPrefab: {fileID: 3084395687958194139, guid: 0588a6d6f293cee46bc28257bb165fe1, type: 3}
   towerPrefab: {fileID: 3517604262307277626, guid: 57aa0b1f13e2e0c4585d56e71e4f892a, type: 3}
   floor: {fileID: 1555382164}
-  NAgents: 5
+  NAgents: 10
   width: 28
   height: 28
   NTowers: 3
