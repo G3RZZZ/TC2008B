@@ -45,7 +45,7 @@ public class AgentController : MonoBehaviour
     string updateEndpoint = "/update";
     public AgentsData agentsData, obstacleData;
     Dictionary<string, GameObject> agents;
-    Dictionary<string, Vector3> prevPositions, currPositions;
+    public Dictionary<string, Vector3> prevPositions, currPositions;
 
     bool updatedRobot = false, startedRobot = false, updatedBox = false, startedBox = false;
 
@@ -160,15 +160,16 @@ public class AgentController : MonoBehaviour
 
             foreach(AgentData agent in agentsData.positions)
             {
-                Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
 
                     if(!startedRobot)
                     {
+                        Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
                         prevPositions[agent.id] = newAgentPosition;
                         agents[agent.id] = Instantiate(agentPrefab, newAgentPosition, Quaternion.identity);
                     }
                     else
                     {
+                        Vector3 newAgentPosition = new Vector3(agent.x, prevPositions[agent.id].y, agent.z);
                         Vector3 currentPosition = new Vector3();
                         if(currPositions.TryGetValue(agent.id, out currentPosition))
                             prevPositions[agent.id] = currentPosition;
@@ -194,8 +195,8 @@ public class AgentController : MonoBehaviour
 
             foreach(AgentData agent in agentsData.positions)
             {
-                Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
 
+                    Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
                     if(!startedBox)
                     {
                         prevPositions[agent.id] = newAgentPosition;
@@ -205,8 +206,11 @@ public class AgentController : MonoBehaviour
                     else
                     {
                         Vector3 currentPosition = new Vector3();
-                        if(currPositions.TryGetValue(agent.id, out currentPosition))
+                        if(currPositions.TryGetValue(agent.id, out currentPosition)){
+                            newAgentPosition.y = currPositions[agent.id].y;
                             prevPositions[agent.id] = currentPosition;
+                        }
+                        newAgentPosition.y = agents[agent.id].transform.position.y;
                         currPositions[agent.id] = newAgentPosition;
                     }
             }
