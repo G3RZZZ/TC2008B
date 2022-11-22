@@ -3,52 +3,7 @@ guid: 2241749af87eba54e8c006b024cb6eeb
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: aaccent2
-    second: {fileID: 2100000, guid: 086aaf44377e68245b96e794a5e9079e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: accent
-    second: {fileID: 2100000, guid: 90327824751f4844f8b24fee488fe69a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: carbody
-    second: {fileID: 2100000, guid: d1fc32fe7a11ff445933a2e588347063, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: fire
-    second: {fileID: 2100000, guid: 538636dd29ef4904885162faf312a58e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: headlights
-    second: {fileID: 2100000, guid: 4caf3ce31e7244243ad40f503fb60472, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: joint
-    second: {fileID: 2100000, guid: 86ff090d13021ad40a5b4ab183b1961b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: mirror
-    second: {fileID: 2100000, guid: a0ec0053ec00e5f4db2d20a1c4a1c538, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: thrusters
-    second: {fileID: 2100000, guid: 0cf9cd17afd1dd741917348162fcf083, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: windshield
-    second: {fileID: 2100000, guid: ee53d5ed58fe6e6478bd8d98ec29b6e7, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
