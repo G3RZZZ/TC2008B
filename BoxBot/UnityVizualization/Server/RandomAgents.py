@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Modelos de Agente y del medio ambiente
-Movimiento aleatorio del auto en el grid
+# Mateo Herrera - A01751912
+# Gerardo Gutierrez - A01029422
+# Francisco Salcedo -  A01633010
+# Regina Rodriguez - A01284329
 
-Solución al reto de TC2008B semestre AgostoDiciembre 2021
-Autor: Jorge Ramírez Uresti, Octavio Navarro
+"""
+Agents and models used in simulation
 """
 
 from mesa import Agent, Model
@@ -13,19 +14,22 @@ from mesa.space import MultiGrid
 
 class RobotAgent(Agent):
     """
-    Agente que se mueve aleatoriamente y limpia basura al encontrarla.
+    Agent that moves randomly searching for boxes and returns them to stations
     Attributes:
-        unique_id: Id del agente
-        direction: Direccion que elige el agente
-        steps_taken: Cuantos pasos a dado el agente
+        unique_id: The agent's ID
+        previous_pos: Positions previously visited by the agent
+        stations: avaiable station directions.
+        carry_box: box carried by agent
+        look_here: direction agent will look at.
+        steps_taken: Movement made by agent
     """
 
     def __init__(self, unique_id, model, stations, pos):
         """
-        Inicializa el agente
+        Agent initializaton
         Args:
             unique_id: The agent's ID
-            model: Modelo del agente
+            model: Model of agent
         """
         super().__init__(unique_id, model)
         self.steps_taken = 0
@@ -34,29 +38,11 @@ class RobotAgent(Agent):
         self.stations = stations
         self.carry_box = None
         self.look_here = pos
-    
-
-
-    # def get_neighbor_type(self, neighborPos):
-    #   """
-    #   Funcion que regresa la posicion de un agente cuando este es basura,  y
-    #   tambien regresa el numero de agentes de Roomba hay en los espacios
-    #   """
-    #   typeList = self.model.grid.get_cell_list_contents(neighborPos)
-    #   box = False
-    #   free_space = True
-    #   if not self.model.grid.is_cell_empty(neighborPos):
-    #     free_space = False
-    #     for type in typeList:
-    #       if isinstance(type, BoxAgent):
-    #         box =  True
-    #   return (free_space, box)
 
     def checkSensors(self):
       """ 
-      Funcion que analiza los espacios scercanos al agente del Roomba y regresa
-      una lista de espacios a los que moverse. En caso de encontrar basura en el
-      espacio actual no regresa nada.
+      Function that checks the surrounding spaces excluding diiagonals and returns
+      retruns diffrent values depending on what is found.
       """
       possible_steps = self.model.grid.get_neighborhood(self.pos, moore = False)
 
@@ -78,7 +64,7 @@ class RobotAgent(Agent):
 
     def explore(self, posList):
       """ 
-      Moverse a un espacio aleatorio de la lista de espaacios proporcionada.
+      Moves randomly to an adjacent available position
       """
       next_move = self.random.choice(posList)
       self.model.grid.move_agent(self, next_move)
@@ -86,6 +72,9 @@ class RobotAgent(Agent):
       self.look_here = self.pos
 
     def pickUp(self, boxPos):
+      """ 
+      Picks up nearby box
+      """
       print(1)
       typeList = self.model.grid.get_cell_list_contents(boxPos)
       for agent in typeList:
@@ -95,6 +84,10 @@ class RobotAgent(Agent):
       self.look_here = boxPos
 
     def returnToTower(self,  posList):
+      """ 
+      Moves towards an availalble tower. If obstacles in path, bot changes direction
+      towards the space that least affects the path.
+      """
       xs, ys = self.pos
       stations = self.stations
       stations.sort(key = lambda pos: (pos[0] - xs) ** 2 + (pos[1] - ys) ** 2)
@@ -120,6 +113,9 @@ class RobotAgent(Agent):
 
 
     def place(self, coords):
+      """ 
+      Place box in adjactent tower
+      """
       self.previous_pos.clear()
       contents = self.model.grid.get_cell_list_contents(coords)
       if not len(contents) >= 6:
@@ -133,8 +129,8 @@ class RobotAgent(Agent):
 
     def step(self):
         """ 
-        Dependiendo de lo que regresen los sensorees, se mueve el robot o se 
-        limpia el espacio.
+        Depending on what is returned by sensors, the robot makes a possible
+        action
         """
         # self.direction = self.random.randint(0,8)
         # print(f"Agente: {self.unique_id} movimiento {self.direction}")
@@ -153,7 +149,7 @@ class RobotAgent(Agent):
 
 class ObstacleAgent(Agent):
     """
-    Agente que representa un obstaculo
+    Agent that represents an obstacle
     """
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -163,7 +159,7 @@ class ObstacleAgent(Agent):
 
 class BoxAgent(Agent):
     """
-    Agente que representa un espacio basura
+    Agent that represents a box
     """
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -175,7 +171,7 @@ class BoxAgent(Agent):
 
 class TowerAgent(Agent):
     """
-    Agente que representa un espacio basura
+    Agent that represents a tower
     """
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
@@ -185,12 +181,11 @@ class TowerAgent(Agent):
 
 class RandomModel(Model):
     """ 
-    Se crea un un modelo con agentes
+    Model Initialization
     Args:
-        N: Numero de agentes Roomba
-        height, width: El tamano del tablero
-        density: Probablidad de aparicion de basura en un espacio
-        max_time: Tiempo maximo de ejecucion
+        N: Number of robot agents
+        height, width: Size of board
+        num_towers: Number of spawned towers
     """
     def __init__(self, N, num_towers, width, height):
         self.num_agents = N
@@ -201,7 +196,7 @@ class RandomModel(Model):
         self.running = True
         self.num_towers = num_towers
 
-        # Crea el borde
+        # Border is created
         border = [(x,y) for y in range(height) for x in range(width) if y in [0, height-1] or x in [0, width - 1]]
 
         count = 0
@@ -215,7 +210,7 @@ class RandomModel(Model):
         count = 0
 
         stations = []
-
+        # Towers are created and placed
         while (count < self.num_towers):
           xt = int(round(self.random.random() * self.width-1))
           yt = int(round(self.random.random() * self.height-1))
@@ -229,6 +224,8 @@ class RandomModel(Model):
 
         count = 0
 
+
+        # Robot agents are created and placed
         while (count < self.num_agents):
           xt = int(round(self.random.random() * self.width-1))
           yt = int(round(self.random.random() * self.height-1))
@@ -239,8 +236,8 @@ class RandomModel(Model):
             count += 1
 
         count = 0
-        # Crear agentes basura en espacios aleatorios
-
+        
+        # Boxes are created and placed
         while (count < self.num_towers * 5):
           xt = int(round(self.random.random() * self.width-1))
           yt = int(round(self.random.random() * self.height-1))
@@ -258,7 +255,7 @@ class RandomModel(Model):
 
     def checkPlaced(self):
       """
-      Helper method to count trees in a given condition in a given model.
+      Helper method to check if all boxes have been placed.
       """
       for box in self.schedule.agents:
           if isinstance(box, BoxAgent):

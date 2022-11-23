@@ -1,6 +1,10 @@
-﻿// TC2008B. Sistemas Multiagentes y Gráficas Computacionales
-// C# client to interact with Python. Based on the code provided by Sergio Ruiz.
-// Octavio Navarro. October 2021
+﻿// Mateo Herrera - A01751912
+// Gerardo Gutierrez - A01029422
+// Francisco Salcedo -  A01633010
+// Regina Rodriguez - A01284329
+
+// Adapted from TC2008B. Sistemas Multiagentes y Gráficas Computacionales
+// By Octavio Navarro
 
 using System;
 using System.Collections;
@@ -9,6 +13,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
+// Class that contains recieved iinformation of the model
 [Serializable]
 public class ModelData
 {
@@ -24,6 +30,7 @@ public class ModelData
     }
 }
 
+// Class that contains recieved informamtion baout the models agents.
 [Serializable]
 public class AgentData
 {
@@ -39,6 +46,8 @@ public class AgentData
     }
 }
 [Serializable]
+
+// Class that contains recieved information about robot agents
 public class RobotData
 {
     public string id;
@@ -58,6 +67,7 @@ public class RobotData
 
 [Serializable]
 
+// Class that contains a list of AgentData classes
 public class AgentsData
 {
     public List<AgentData> positions;
@@ -65,6 +75,7 @@ public class AgentsData
     public AgentsData() => this.positions = new List<AgentData>();
 }
 
+// Class that contains a list  of RobotAgent classes
 public class RobotsData
 {
     public List<RobotData> positions;
@@ -74,7 +85,7 @@ public class RobotsData
 
 public class AgentController : MonoBehaviour
 {
-    // private string url = "https://agents.us-south.cf.appdomain.cloud/";
+    // Definition of get and post endpoints
     string serverUrl = "http://localhost:8585";
     string getAgentsEndpoint = "/getAgents";
     string getObstaclesEndpoint = "/getObstacles";
@@ -82,20 +93,21 @@ public class AgentController : MonoBehaviour
     string getTowersEndpoint = "/getTowers";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
+
+    // Declaration of variables
     public AgentsData agentsData, obstacleData;
     public RobotsData robotsData;
     public ModelData modelData;
     Dictionary<string, GameObject> agents;
     public Dictionary<string, Vector3> prevPositions, currPositions, lookPositions;
-
     bool updatedRobot = false, startedRobot = false, updatedBox = false, startedBox = false, keepRunning = true;
-
     public GameObject agentPrefab, obstaclePrefab, boxPrefab, towerPrefab, floor;
     public int NAgents, width, height, NTowers;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
     [SerializeField] float max_time = 100;
-
+    
+    // Initialization of variables and data sent to model
     void Start()
     {
         agentsData = new AgentsData();
@@ -119,8 +131,10 @@ public class AgentController : MonoBehaviour
     private void Update() 
     {
 
+      // Check if agents are still updating or simulation has reached the end
       if (keepRunning || updatedRobot || updatedBox)
       {
+        // Ehen timer reaches , everything updates again.
         if(timer < 0 && keepRunning)
         {
             timer = timeToUpdate;
@@ -129,6 +143,7 @@ public class AgentController : MonoBehaviour
             StartCoroutine(UpdateSimulation());
         }
 
+        // When everything is done updating, positions are changed.
         if (updatedRobot && updatedBox)
         {
             timer -= Time.deltaTime;
@@ -146,25 +161,26 @@ public class AgentController : MonoBehaviour
                 agents[agent.Key].transform.localPosition = interpolated;
                 if(direction != Vector3.zero && currentPosition.y <= 0.075) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
             }
-
-            // float t = (timer / timeToUpdate);
-            // dt = t * t * ( 3f - 2f*t);
         }
       }
     }
- 
+
+    // Coroutine that updates the model. It fetches the update server endpoint,
+    // and also starts the update robots and boxrs coroutines.
     IEnumerator UpdateSimulation()
     {
         float time = Time.realtimeSinceStartup;
         Debug.Log("Total Time: " + Time.realtimeSinceStartup);
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + updateEndpoint);
         yield return www.SendWebRequest();
- 
+
         if (www.result != UnityWebRequest.Result.Success)
             Debug.Log(www.error);
         else 
         {
             modelData = JsonUtility.FromJson<ModelData>(www.downloadHandler.text);
+            // If model sends back stop signal or max time is reached, 
+            // simulation is stopped.
             if (!modelData.running || time > max_time)
             {
               keepRunning = false;
@@ -174,6 +190,8 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Initialization configuration is sent to the model in server. Initial 
+    // positions of all models are fetched.
     IEnumerator SendConfiguration()
     {
         WWWForm form = new WWWForm();
@@ -203,6 +221,7 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutiene that fetches robot agent data.
     IEnumerator GetAgentsData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getAgentsEndpoint);
@@ -212,9 +231,13 @@ public class AgentController : MonoBehaviour
             Debug.Log(www.error);
         else 
         {
+            // Robot data is stored in a list of RobotData classes
             robotsData = JsonUtility.FromJson<RobotsData>(www.downloadHandler.text);
             float steps = 0;
 
+            // New agaent positions are stored in dictionaries. Previous positions
+            // are stored as well.  The position where the roboy should be looking at
+            // is also stored in a dictionary.
             foreach(RobotData agent in robotsData.positions)
             {
 
@@ -237,6 +260,7 @@ public class AgentController : MonoBehaviour
                             prevPositions[agent.id] = currentPosition;
                         }
 
+                        // Y value is kept the same as before.
                         if(agents.TryGetValue(agent.id, out currentY)) {
                           newAgentPosition.y = agents[agent.id].transform.position.y;
                         }
@@ -249,6 +273,8 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutine that fetches box agent data. It is the same as the robot agent coroutine,
+    // except the data returned by the server is less.
     IEnumerator GetBoxesData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getBoxesEndpoint);
@@ -273,6 +299,7 @@ public class AgentController : MonoBehaviour
                     }
                     else
                     {
+                        // Y value is kept the same
                         Vector3 currentPosition = new Vector3();
                         if(currPositions.TryGetValue(agent.id, out currentPosition)){
                             newAgentPosition.y = currPositions[agent.id].y;
@@ -288,6 +315,8 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutine that fetches obstacle agent data. This coroutine is only called once
+    // since obstacles do not move.
     IEnumerator GetObstacleData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
@@ -309,6 +338,8 @@ public class AgentController : MonoBehaviour
         
     }
 
+    // Coroutine that fetches tower agent data. This coroutine is only called once
+    // since obstacles do not move.
     IEnumerator GetTowersData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTowersEndpoint);
