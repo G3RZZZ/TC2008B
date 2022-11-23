@@ -142,9 +142,8 @@ public class AgentController : MonoBehaviour
                 Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
                 Vector3 direction = lookPosition - interpolated;
 
-
                 agents[agent.Key].transform.localPosition = interpolated;
-                if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                if(direction != Vector3.zero && currentPosition.y <= 0.075) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
             }
 
             // float t = (timer / timeToUpdate);
@@ -230,11 +229,15 @@ public class AgentController : MonoBehaviour
                     else
                     {
                         Vector3 currentPosition = new Vector3();
+                        GameObject currentY;
                         if(currPositions.TryGetValue(agent.id, out currentPosition)){
                             newAgentPosition.y = currPositions[agent.id].y;
                             prevPositions[agent.id] = currentPosition;
                         }
-                        newAgentPosition.y = agents[agent.id].transform.position.y;
+
+                        if(agents.TryGetValue(agent.id, out currentY)) {
+                          newAgentPosition.y = agents[agent.id].transform.position.y;
+                        }
                         currPositions[agent.id] = newAgentPosition;
                     }
             }

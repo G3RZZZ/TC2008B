@@ -334,15 +334,19 @@ MonoBehaviour:
     positions: []
   obstacleData:
     positions: []
+  modelData:
+    message: 
+    currentStep: 0
+    running: 0
   agentPrefab: {fileID: 8604445927572338128, guid: 236d9f85515d5d94aa562cf27a43b2c5, type: 3}
   obstaclePrefab: {fileID: 961990229689801968, guid: 0870e23a47df89e468e8af19c065fce0, type: 3}
   boxPrefab: {fileID: 3084395687958194139, guid: 0588a6d6f293cee46bc28257bb165fe1, type: 3}
-  towerPrefab: {fileID: 3517604262307277626, guid: 57aa0b1f13e2e0c4585d56e71e4f892a, type: 3}
+  towerPrefab: {fileID: 666302837327897323, guid: b9ac157fe5f83d74fbd5dfa1895b6701, type: 3}
   floor: {fileID: 1555382164}
   NAgents: 10
-  width: 10
-  height: 10
-  NTowers: 1
+  width: 20
+  height: 20
+  NTowers: 4
   timeToUpdate: 1
 --- !u!4 &1518653506
 Transform:

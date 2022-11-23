@@ -58,7 +58,7 @@ def getBoxes():
     global randomModel
 
     if request.method == 'GET':
-        boxPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, BoxAgent)]
+        boxPositions = [{"id": str(agent.unique_id), "x": x, "y":0.075, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, BoxAgent)]
 
         return jsonify({'positions':boxPositions})
 
