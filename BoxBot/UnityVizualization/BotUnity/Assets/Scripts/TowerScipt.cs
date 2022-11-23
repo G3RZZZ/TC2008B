@@ -30,7 +30,7 @@ public class TowerScipt : MonoBehaviour
         foreach (var box in boxes)
         {
           Vector3 pos = script.prevPositions[box.name];
-          pos.y = pos.y + 2;
+          pos.y = pos.y + .58f;
           script.currPositions[box.name] = pos;
 
         }
@@ -38,28 +38,4 @@ public class TowerScipt : MonoBehaviour
       }
     }
 
-    IEnumerator moveBox(GameObject box) {
-      
-      Vector3 nextPosition = box.transform.position;
-
-      timer = timeToUpdate;
-
-      nextPosition.y = nextPosition.y + 2;
-      while (timer > 0)
-      {
-        Vector3 currentPosition = box.transform.position;
-        timer -= Time.deltaTime;
-        dt = 1.0f - (timer / timeToUpdate);
-        Vector3 interpolated = Vector3.Lerp(currentPosition, nextPosition, dt);
-        Vector3 direction = nextPosition - interpolated;
-
-        box.transform.localPosition = interpolated;
-        if(direction != Vector3.zero) box.transform.rotation = Quaternion.LookRotation(direction);
-
-        // Yield here
-        yield return null;
-      }  
-      // box.transform.position = nextPosition;
-      yield return null;
-    }
 }
