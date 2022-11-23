@@ -241,7 +241,7 @@ public class AgentController : MonoBehaviour
                         currPositions[agent.id] = newAgentPosition;
                     }
             }
-            Debug.Log("Total steps Taken: " + steps);
+            Debug.Log("Total moves made by the robots: " + steps);
             updatedRobot = true;
             if(!startedRobot) startedRobot = true;
         }
