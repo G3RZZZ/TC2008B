@@ -1,6 +1,10 @@
-# TC2008B. Sistemas Multiagentes y Gráficas Computacionales
-# Python flask server to interact with Unity. Based on the code provided by Sergio Ruiz.
-# Octavio Navarro. October 2021
+# # Mateo Herrera - A01751912
+# Gerardo Gutierrez - A01029422
+# Francisco Salcedo -  A01633010
+# Regina Rodriguez - A01284329
+
+# Adapted from TC2008B. Sistemas Multiagentes y Gráficas Computacionales
+# by Octavio Navarro.
 
 from flask import Flask, request, jsonify
 from RandomAgents import *
@@ -16,6 +20,7 @@ app = Flask("Traffic example")
 
 # @app.route('/', methods=['POST', 'GET'])
 
+# Endpoint that initializes model
 @app.route('/init', methods=['POST', 'GET'])
 def initModel():
     global currentStep, randomModel, num_agents, width, height, num_towers
@@ -33,6 +38,7 @@ def initModel():
 
         return jsonify({"message":"Parameters recieved, model initiated."})
 
+# Endpoint that fetches robot agent data
 @app.route('/getAgents', methods=['GET'])
 def getAgents():
     global randomModel
@@ -44,6 +50,7 @@ def getAgents():
 
         return jsonify({'positions':agentPositions})
 
+# Endpoint that fetches obstacle data
 @app.route('/getObstacles', methods=['GET'])
 def getObstacles():
     global randomModel
@@ -53,6 +60,7 @@ def getObstacles():
 
         return jsonify({'positions':carPositions})
 
+# Endpoint that fetches box data
 @app.route('/getBoxes', methods=['GET'])
 def getBoxes():
     global randomModel
@@ -62,6 +70,7 @@ def getBoxes():
 
         return jsonify({'positions':boxPositions})
 
+# Endpoint that fetches tower data
 @app.route('/getTowers', methods=['GET'])
 def getTowers():
     global randomModel
@@ -71,6 +80,7 @@ def getTowers():
 
         return jsonify({'positions':towerPositions})
 
+# Endpoint that fetches model data and updates the model
 @app.route('/update', methods=['GET'])
 def updateModel():
     global currentStep, randomModel
@@ -79,5 +89,6 @@ def updateModel():
         currentStep += 1
         return jsonify({'message':f'Model updated to step {currentStep}.', 'currentStep':currentStep, 'running': randomModel.running})
 
+# Server run
 if __name__=='__main__':
     app.run(host="localhost", port=8585, debug=True)
