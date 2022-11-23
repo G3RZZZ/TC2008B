@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class TowerScipt : MonoBehaviour
 {
-    
-    List<GameObject> boxes;
+    HashSet<GameObject> boxes;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
     GameObject agentController;
@@ -13,7 +12,7 @@ public class TowerScipt : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      boxes = new List<GameObject>();
+      boxes = new HashSet<GameObject>();
       agentController = GameObject.FindGameObjectWithTag("AgentController");
       script = agentController.GetComponent<AgentController>();
     }
@@ -30,7 +29,7 @@ public class TowerScipt : MonoBehaviour
         foreach (var box in boxes)
         {
           Vector3 pos = script.prevPositions[box.name];
-          pos.y = pos.y + 2;
+          pos.y = pos.y + 1;
           script.currPositions[box.name] = pos;
 
         }

@@ -38,7 +38,7 @@ def getAgents():
     global randomModel
 
     if request.method == 'GET':
-        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z, "steps_taken": agent.steps_taken, "xl": agent.look_here[0], "zl": agent.look_here[1]} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, RobotAgent)]
+        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z, "steps_taken": agent.steps_taken, "xl": agent.look_here[0], "zl": agent.look_here[1]} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, RobotAgent)]
 
         print(len(agentPositions))
 
@@ -49,7 +49,7 @@ def getObstacles():
     global randomModel
 
     if request.method == 'GET':
-        carPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, ObstacleAgent)]
+        carPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, ObstacleAgent)]
 
         return jsonify({'positions':carPositions})
 
@@ -58,7 +58,7 @@ def getBoxes():
     global randomModel
 
     if request.method == 'GET':
-        boxPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, BoxAgent)]
+        boxPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, BoxAgent)]
 
         return jsonify({'positions':boxPositions})
 
@@ -67,7 +67,7 @@ def getTowers():
     global randomModel
 
     if request.method == 'GET':
-        towerPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, TowerAgent)]
+        towerPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, TowerAgent)]
 
         return jsonify({'positions':towerPositions})
 
