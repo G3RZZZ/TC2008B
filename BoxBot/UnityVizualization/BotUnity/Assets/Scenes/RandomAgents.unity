@@ -334,7 +334,7 @@ MonoBehaviour:
     positions: []
   obstacleData:
     positions: []
-  agentPrefab: {fileID: 993549348249905, guid: 563375cb179ab4d4d8c0ce2bfc651964, type: 3}
+  agentPrefab: {fileID: 8604445927572338128, guid: 236d9f85515d5d94aa562cf27a43b2c5, type: 3}
   obstaclePrefab: {fileID: 961990229689801968, guid: 0870e23a47df89e468e8af19c065fce0, type: 3}
   boxPrefab: {fileID: 3084395687958194139, guid: 0588a6d6f293cee46bc28257bb165fe1, type: 3}
   towerPrefab: {fileID: 3517604262307277626, guid: 57aa0b1f13e2e0c4585d56e71e4f892a, type: 3}
