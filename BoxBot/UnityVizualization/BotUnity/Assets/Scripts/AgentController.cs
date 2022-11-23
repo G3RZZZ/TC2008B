@@ -10,6 +10,21 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [Serializable]
+public class ModelData
+{
+    public string message;
+    public float currentStep;
+    public bool running;
+
+    public ModelData(string message, float currentStep, bool running)
+    {
+      this.message = message;
+      this.currentStep = currentStep;
+      this.running = running;
+    }
+}
+
+[Serializable]
 public class AgentData
 {
     public string id;
@@ -23,6 +38,23 @@ public class AgentData
         this.z = z;
     }
 }
+[Serializable]
+public class RobotData
+{
+    public string id;
+    public float steps_taken, x, y, z, xl, zl;
+
+    public RobotData(string id, float steps_taken, float x, float xl, float y, float z,  float zl)
+    {
+        this.id = id;
+        this.steps_taken = steps_taken;
+        this.x = x;
+        this.xl = xl;
+        this.y = y;
+        this.z = z;
+        this.zl = zl;
+    }
+}
 
 [Serializable]
 
@@ -31,6 +63,13 @@ public class AgentsData
     public List<AgentData> positions;
 
     public AgentsData() => this.positions = new List<AgentData>();
+}
+
+public class RobotsData
+{
+    public List<RobotData> positions;
+
+    public RobotsData() => this.positions = new List<RobotData>();
 }
 
 public class AgentController : MonoBehaviour
@@ -44,10 +83,12 @@ public class AgentController : MonoBehaviour
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
     public AgentsData agentsData, obstacleData;
+    public RobotsData robotsData;
+    public ModelData modelData;
     Dictionary<string, GameObject> agents;
-    public Dictionary<string, Vector3> prevPositions, currPositions;
+    public Dictionary<string, Vector3> prevPositions, currPositions, lookPositions;
 
-    bool updatedRobot = false, startedRobot = false, updatedBox = false, startedBox = false;
+    bool updatedRobot = false, startedRobot = false, updatedBox = false, startedBox = false, keepRunning = true;
 
     public GameObject agentPrefab, obstaclePrefab, boxPrefab, towerPrefab, floor;
     public int NAgents, width, height, NTowers;
@@ -57,10 +98,12 @@ public class AgentController : MonoBehaviour
     void Start()
     {
         agentsData = new AgentsData();
+        robotsData = new RobotsData();
         obstacleData = new AgentsData();
 
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
+        lookPositions = new Dictionary<string, Vector3>();
 
         agents = new Dictionary<string, GameObject>();
 
@@ -74,7 +117,10 @@ public class AgentController : MonoBehaviour
 
     private void Update() 
     {
-        if(timer < 0)
+
+      if (keepRunning || updatedRobot || updatedBox)
+      {
+        if(timer < 0 && keepRunning)
         {
             timer = timeToUpdate;
             updatedRobot = false;
@@ -91,9 +137,11 @@ public class AgentController : MonoBehaviour
             {
                 Vector3 currentPosition = agent.Value;
                 Vector3 previousPosition = prevPositions[agent.Key];
+                Vector3 lookPosition = lookPositions[agent.Key];
 
                 Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
-                Vector3 direction = currentPosition - interpolated;
+                Vector3 direction = lookPosition - interpolated;
+
 
                 agents[agent.Key].transform.localPosition = interpolated;
                 if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
@@ -102,6 +150,7 @@ public class AgentController : MonoBehaviour
             // float t = (timer / timeToUpdate);
             // dt = t * t * ( 3f - 2f*t);
         }
+      }
     }
  
     IEnumerator UpdateSimulation()
@@ -113,6 +162,12 @@ public class AgentController : MonoBehaviour
             Debug.Log(www.error);
         else 
         {
+            modelData = JsonUtility.FromJson<ModelData>(www.downloadHandler.text);
+            if (!modelData.running)
+            {
+              Debug.Log("Total Time: " + Time.realtimeSinceStartup);
+              keepRunning = false;
+            }
             StartCoroutine(GetAgentsData());
             StartCoroutine(GetBoxesData());
         }
@@ -156,27 +211,34 @@ public class AgentController : MonoBehaviour
             Debug.Log(www.error);
         else 
         {
-            agentsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+            robotsData = JsonUtility.FromJson<RobotsData>(www.downloadHandler.text);
+            float steps = 0;
 
-            foreach(AgentData agent in agentsData.positions)
+            foreach(RobotData agent in robotsData.positions)
             {
 
-                    if(!startedRobot)
+                    Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
+                    Vector3 newLookPosition = new Vector3(agent.xl, agent.y, agent.zl);
+                    lookPositions[agent.id] = newLookPosition;
+                    steps+= agent.steps_taken;
+                    if(!startedBox)
                     {
-                        Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
                         prevPositions[agent.id] = newAgentPosition;
                         agents[agent.id] = Instantiate(agentPrefab, newAgentPosition, Quaternion.identity);
+                        agents[agent.id].name = agent.id;
                     }
                     else
                     {
-                        Vector3 newAgentPosition = new Vector3(agent.x, prevPositions[agent.id].y, agent.z);
                         Vector3 currentPosition = new Vector3();
-                        if(currPositions.TryGetValue(agent.id, out currentPosition))
+                        if(currPositions.TryGetValue(agent.id, out currentPosition)){
+                            newAgentPosition.y = currPositions[agent.id].y;
                             prevPositions[agent.id] = currentPosition;
+                        }
+                        newAgentPosition.y = agents[agent.id].transform.position.y;
                         currPositions[agent.id] = newAgentPosition;
                     }
             }
-
+            Debug.Log("Total steps Taken: " + steps);
             updatedRobot = true;
             if(!startedRobot) startedRobot = true;
         }
@@ -197,6 +259,7 @@ public class AgentController : MonoBehaviour
             {
 
                     Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
+                    lookPositions[agent.id] = newAgentPosition;
                     if(!startedBox)
                     {
                         prevPositions[agent.id] = newAgentPosition;

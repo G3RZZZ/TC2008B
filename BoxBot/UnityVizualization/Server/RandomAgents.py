@@ -20,7 +20,7 @@ class RobotAgent(Agent):
         steps_taken: Cuantos pasos a dado el agente
     """
 
-    def __init__(self, unique_id, model, stations):
+    def __init__(self, unique_id, model, stations, pos):
         """
         Inicializa el agente
         Args:
@@ -33,6 +33,7 @@ class RobotAgent(Agent):
         self.previous_pos = []
         self.stations = stations
         self.carry_box = None
+        self.look_here = pos
     
 
 
@@ -82,6 +83,7 @@ class RobotAgent(Agent):
       next_move = self.random.choice(posList)
       self.model.grid.move_agent(self, next_move)
       self.steps_taken+=1
+      self.look_here = self.pos
 
     def pickUp(self, boxPos):
       print(1)
@@ -90,6 +92,7 @@ class RobotAgent(Agent):
         if isinstance(agent, BoxAgent):
           self.model.grid.move_agent(agent, self.pos)
           self.carry_box = agent
+      self.look_here = boxPos
 
     def returnToTower(self,  posList):
       xs, ys = self.pos
@@ -104,6 +107,7 @@ class RobotAgent(Agent):
           self.previous_pos.append(self.pos)
           self.model.grid.move_agent(self, pos)
           self.model.grid.move_agent(self.carry_box, pos)
+          self.look_here = self.pos
           return
       
       if self.previous_pos:
@@ -112,15 +116,20 @@ class RobotAgent(Agent):
         self.model.grid.move_agent(self, pos)
         self.model.grid.move_agent(self.carry_box, pos)
 
+      self.look_here = self.pos
+
 
     def place(self, coords):
       self.previous_pos.clear()
       contents = self.model.grid.get_cell_list_contents(coords)
       if not len(contents) >= 6:
         self.model.grid.move_agent(self.carry_box, coords)
+        self.carry_box.placed = True
         self.carry_box = False
       else: 
         self.stations.remove(coords)
+
+      self.look_here = coords
 
     def step(self):
         """ 
@@ -158,6 +167,7 @@ class BoxAgent(Agent):
     """
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+        self.placed = False
 
     def step(self):
         pass    
@@ -223,7 +233,7 @@ class RandomModel(Model):
           xt = int(round(self.random.random() * self.width-1))
           yt = int(round(self.random.random() * self.height-1))
           if self.grid.is_cell_empty((xt,yt)):
-            a = RobotAgent(str(count) + "robot",self, stations) 
+            a = RobotAgent(str(count) + "robot",self, stations, (xt, yt)) 
             self.schedule.add(a)
             self.grid.place_agent(a, (xt,yt))
             count += 1
@@ -241,5 +251,17 @@ class RandomModel(Model):
             count += 1
             
     def step(self):
-        '''Advance the model by one step.'''
-        self.schedule.step()
+      '''Advance the model by one step.'''
+      self.schedule.step()
+      if self.checkPlaced():
+        self.running = False
+
+    def checkPlaced(self):
+      """
+      Helper method to count trees in a given condition in a given model.
+      """
+      for box in self.schedule.agents:
+          if isinstance(box, BoxAgent):
+            if not box.placed:
+              return False
+      return True
