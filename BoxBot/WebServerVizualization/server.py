@@ -41,7 +41,7 @@ print("Enter the grid heigth: ")
 heigth = int(input())
 
 # Establecer parametros del modelo
-model_params = {"N":NumberInput("Agent Number", 10), "width": width, "height": heigth, "density": Slider("Box density", 0.1, 0.01, 1, 0.01), "num_towers": NumberInput("TowerNumber", 1)}
+model_params = {"N":NumberInput("Agent Number", 10), "width": width, "height": heigth, "num_towers": NumberInput("TowerNumber", 1)}
 grid = CanvasGrid(agent_portrayal, width, heigth, 500, 500)
 
 

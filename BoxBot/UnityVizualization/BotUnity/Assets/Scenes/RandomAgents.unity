@@ -340,9 +340,9 @@ MonoBehaviour:
   towerPrefab: {fileID: 3517604262307277626, guid: 57aa0b1f13e2e0c4585d56e71e4f892a, type: 3}
   floor: {fileID: 1555382164}
   NAgents: 10
-  width: 28
-  height: 28
-  NTowers: 3
+  width: 10
+  height: 10
+  NTowers: 1
   timeToUpdate: 1
 --- !u!4 &1518653506
 Transform:

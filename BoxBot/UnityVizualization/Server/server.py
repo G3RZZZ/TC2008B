@@ -38,7 +38,7 @@ def getAgents():
     global randomModel
 
     if request.method == 'GET':
-        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, RobotAgent)]
+        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":1, "z":z, "steps_taken": agent.steps_taken, "xl": agent.look_here[0], "zl": agent.look_here[1]} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, RobotAgent)]
 
         print(len(agentPositions))
 
@@ -77,7 +77,7 @@ def updateModel():
     if request.method == 'GET':
         randomModel.step()
         currentStep += 1
-        return jsonify({'message':f'Model updated to step {currentStep}.', 'currentStep':currentStep})
+        return jsonify({'message':f'Model updated to step {currentStep}.', 'currentStep':currentStep, 'running': randomModel.running})
 
 if __name__=='__main__':
     app.run(host="localhost", port=8585, debug=True)
