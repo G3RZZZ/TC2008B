@@ -94,6 +94,7 @@ public class AgentController : MonoBehaviour
     public int NAgents, width, height, NTowers;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
+    [SerializeField] float max_time = 100;
 
     void Start()
     {
@@ -154,6 +155,8 @@ public class AgentController : MonoBehaviour
  
     IEnumerator UpdateSimulation()
     {
+        float time = Time.realtimeSinceStartup;
+        Debug.Log("Total Time: " + Time.realtimeSinceStartup);
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + updateEndpoint);
         yield return www.SendWebRequest();
  
@@ -162,9 +165,8 @@ public class AgentController : MonoBehaviour
         else 
         {
             modelData = JsonUtility.FromJson<ModelData>(www.downloadHandler.text);
-            if (!modelData.running)
+            if (!modelData.running || time > max_time)
             {
-              Debug.Log("Total Time: " + Time.realtimeSinceStartup);
               keepRunning = false;
             }
             StartCoroutine(GetAgentsData());

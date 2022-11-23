@@ -200,7 +200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 357902674}
   m_LocalRotation: {x: 0.34091946, y: -0.38716933, z: 0.18844786, w: 0.8356801}
-  m_LocalPosition: {x: 16.83, y: 7.51, z: 1.5}
+  m_LocalPosition: {x: 12.58, y: 8.98, z: 1.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -343,11 +343,12 @@ MonoBehaviour:
   boxPrefab: {fileID: 3084395687958194139, guid: 0588a6d6f293cee46bc28257bb165fe1, type: 3}
   towerPrefab: {fileID: 666302837327897323, guid: b9ac157fe5f83d74fbd5dfa1895b6701, type: 3}
   floor: {fileID: 1555382164}
-  NAgents: 10
-  width: 20
-  height: 20
+  NAgents: 5
+  width: 15
+  height: 15
   NTowers: 4
   timeToUpdate: 1
+  max_time: 10
 --- !u!4 &1518653506
 Transform:
   m_ObjectHideFlags: 0
