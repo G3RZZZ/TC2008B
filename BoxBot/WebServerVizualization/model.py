@@ -82,7 +82,7 @@ class RandomModel(Model):
 
     def checkPlaced(self):
       """
-      Helper method to count trees in a given condition in a given model.
+      Helper method to count boxes in a given condition in a given model.
       """
       for box in self.schedule.agents:
           if isinstance(box, BoxAgent):
