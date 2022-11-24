@@ -12,10 +12,6 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
     - Alternando entre verde y rojo, señaliza el siga y el alto a los autos.
 -	Destino
     - Punto final que alcanza el auto para salir de la circulación del mapa.
--	Calle
-    - Marca y delimitar el mapa y la circulación de los autos, así como su dirección de flujo vial.
--	Obstáculos
-    - Evitados por los autos, alterando el camino que toman los autos para llegar a su destino. 
 
 ### Pasos para ejecutar simulación
 
