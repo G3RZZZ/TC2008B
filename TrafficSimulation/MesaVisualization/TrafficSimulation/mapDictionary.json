@@ -1,0 +1,24 @@
+{
+    ">" : "Right",
+    "<" : "Left",
+    "!" : {
+            "direction": "Up",
+            "time": 15
+          }, 
+    "@" : {
+            "direction": "Right",
+            "time": 7
+          },
+    "$" : {
+            "direction": "Down",
+            "time": 15
+          },
+    "%" : {
+            "direction": "Left",
+            "time": 7
+          },
+    "#" : "Obstacle",
+    "v" : "Down",
+    "^" : "Up",
+    "D" : "Destination"
+}
