@@ -36,7 +36,7 @@ def initModel():
         print(num_agents, width, height)
         randomModel = RandomModel(num_agents, num_towers, width, height)
 
-        return jsonify({"message":"Parameters recieved, model initiated."})
+        return jsonify({"message":"Parameters received, model initiated."})
 
 # Endpoint that fetches robot agent data
 @app.route('/getAgents', methods=['GET'])
