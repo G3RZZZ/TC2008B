@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-// Class that contains recieved iinformation of the model
+// Class that contains received information of the model
 [Serializable]
 public class ModelData
 {
@@ -30,7 +30,7 @@ public class ModelData
     }
 }
 
-// Class that contains recieved informamtion baout the models agents.
+// Class that contains received information about the models agents.
 [Serializable]
 public class AgentData
 {
