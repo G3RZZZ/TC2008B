@@ -47,7 +47,7 @@ public class AgentController : MonoBehaviour
 
     bool updated = false, started = false;
 
-    public GameObject agentPrefab, obstaclePrefab, floor;
+    public GameObject agentPrefab, obstaclePrefab;
     public int NAgents, width, height;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
@@ -62,8 +62,8 @@ public class AgentController : MonoBehaviour
 
         agents = new Dictionary<string, GameObject>();
 
-        floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
-        floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
+        // floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
+        // floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
         
         timer = timeToUpdate;
 
@@ -136,7 +136,7 @@ public class AgentController : MonoBehaviour
             Debug.Log("Configuration upload complete!");
             Debug.Log("Getting Agents positions");
             StartCoroutine(GetAgentsData());
-            StartCoroutine(GetObstacleData());
+            // StartCoroutine(GetObstacleData());
         }
     }
 
@@ -154,10 +154,12 @@ public class AgentController : MonoBehaviour
             foreach(AgentData agent in agentsData.positions)
             {
                 Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
-
-                    if(!started)
+                    Debug.Log(started);
+                    if(!prevPositions.ContainsKey(agent.id))
                     {
+                        Debug.Log(agent.id);
                         prevPositions[agent.id] = newAgentPosition;
+                        Debug.Log(prevPositions[agent.id]);
                         agents[agent.id] = Instantiate(agentPrefab, newAgentPosition, Quaternion.identity);
                     }
                     else
@@ -170,27 +172,26 @@ public class AgentController : MonoBehaviour
             }
 
             updated = true;
-            if(!started) started = true;
         }
     }
 
-    IEnumerator GetObstacleData() 
-    {
-        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
-        yield return www.SendWebRequest();
+    // IEnumerator GetObstacleData() 
+    // {
+    //     UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
+    //     yield return www.SendWebRequest();
  
-        if (www.result != UnityWebRequest.Result.Success)
-            Debug.Log(www.error);
-        else 
-        {
-            obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+    //     if (www.result != UnityWebRequest.Result.Success)
+    //         Debug.Log(www.error);
+    //     else 
+    //     {
+    //         obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(obstacleData.positions);
+    //         Debug.Log(obstacleData.positions);
 
-            foreach(AgentData obstacle in obstacleData.positions)
-            {
-                Instantiate(obstaclePrefab, new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
-            }
-        }
-    }
+    //         foreach(AgentData obstacle in obstacleData.positions)
+    //         {
+    //             Instantiate(obstaclePrefab, new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
+    //         }
+    //     }
+    // }
 }
