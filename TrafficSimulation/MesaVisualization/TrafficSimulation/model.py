@@ -27,8 +27,7 @@ class RandomModel(Model):
 
         self.traffic_lights = []
         self.destinations = []
-        
-        map = dict()
+        self.map = dict()
 
         with open('2022_base.txt') as baseFile:
             lines = baseFile.readlines()
@@ -43,7 +42,7 @@ class RandomModel(Model):
                     if col in ["v", "^", ">", "<"]:
                         agent = Road(f"r_{r*self.width+c}", self, dataDictionary[col])
                         self.grid.place_agent(agent, (c, self.height - r - 1))
-                        map[(c, self.height - r - 1)] = Node((c, self.height - r - 1), dataDictionary[col])
+                        self.map[(c, self.height - r - 1)] = Node((c, self.height - r - 1), dataDictionary[col])
 
 
                     elif col in ["!", "@", "$", "%"]:
@@ -52,7 +51,7 @@ class RandomModel(Model):
                         self.schedule.add(agent)
                         self.traffic_lights.append(agent)
                         
-                        map[(c, self.height - r - 1)] = Node((c, self.height - r - 1), dataDictionary[col]["direction"])
+                        self.map[(c, self.height - r - 1)] = Node((c, self.height - r - 1), dataDictionary[col]["direction"])
 
                     elif col == "#":
                         agent = Obstacle(f"ob_{r*self.width+c}", self)
@@ -63,36 +62,43 @@ class RandomModel(Model):
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.destinations.append((c, self.height - r - 1))
 
-        map[self.destinations[0]] = Node(self.destinations[0])
-        agent = Car("car1", self, self.destinations[0], map)
-        self.grid.place_agent(agent, (1,1))
-        self.schedule.add(agent)
+        self.corners = [(0,0), (0, self.height-1), (self.width-1, 0), (self.width-1, self.height-1)]
+        self.N_destinations = len(self.destinations)-1
 
-        map[self.destinations[1]] = Node(self.destinations[1])
-        agent = Car("car2", self, self.destinations[1], map)
-        self.grid.place_agent(agent, (23,1))
-        self.schedule.add(agent)
+        # self.map[self.destinations[1]] = Node(self.destinations[1])
+        # agent = Car("car2", self, self.destinations[1], self.map)
+        # self.grid.place_agent(agent, (23,1))
+        # self.schedule.add(agent)
 
-        map[self.destinations[3]] = Node(self.destinations[3])
-        agent = Car("car3", self, self.destinations[3], map)
-        self.grid.place_agent(agent, (1,23))
-        self.schedule.add(agent)
+        # self.map[self.destinations[3]] = Node(self.destinations[3])
+        # agent = Car("car3", self, self.destinations[3], self.map)
+        # self.grid.place_agent(agent, (1,23))
+        # self.schedule.add(agent)
 
-        map[self.destinations[4]] = Node(self.destinations[4])
-        agent = Car("car4", self, self.destinations[4], map)
-        self.grid.place_agent(agent, (23,23))
-        self.schedule.add(agent)
+        # self.map[self.destinations[4]] = Node(self.destinations[4])
+        # agent = Car("car4", self, self.destinations[4], self.map)
+        # self.grid.place_agent(agent, (23,23))
+        # self.schedule.add(agent)
 
-        map[self.destinations[5]] = Node(self.destinations[5])
-        agent = Car("car5", self, self.destinations[5], map)
-        self.grid.place_agent(agent, (6,8))
-        self.schedule.add(agent)
+        # self.map[self.destinations[5]] = Node(self.destinations[5])
+        # agent = Car("car5", self, self.destinations[5], self.map)
+        # self.grid.place_agent(agent, (6,8))
+        # self.schedule.add(agent)
 
         self.num_agents = N
         self.running = True
 
     def step(self):
         '''Advance the model by one step.'''
+
+        if self.schedule.steps % 5 == 0:
+          for corner in self.corners:
+            map_copy = self.map.copy()
+            random_destination = round(self.random.random()*self.N_destinations)
+            map_copy[self.destinations[random_destination]] = Node(self.destinations[random_destination])
+            agent = Car(f"{self.schedule.steps}car{corner}", self, self.destinations[random_destination], map_copy)
+            self.grid.place_agent(agent, corner)
+            self.schedule.add(agent)
         if self.schedule.steps % 10 == 0:
             for agent in self.traffic_lights:
                 agent.state = not agent.state
