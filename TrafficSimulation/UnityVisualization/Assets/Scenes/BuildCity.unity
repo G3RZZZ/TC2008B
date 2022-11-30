@@ -450,6 +450,7 @@ MonoBehaviour:
   - {fileID: 8502160689449482360, guid: 17124440c101ab84e8ddda6f0b647fae, type: 3}
   - {fileID: 3968242763327026236, guid: 538dcd1611122c84cbee84ff93d94d9d, type: 3}
   - {fileID: 3654926467283921634, guid: 343fc0fde65f74c42b1d3f3f967d75ff, type: 3}
+  - {fileID: 1613904097187270658, guid: ea48ee06354ae6d4e980fd0e5392d014, type: 3}
   agentPrefab: {fileID: 8502160689449482360, guid: 17124440c101ab84e8ddda6f0b647fae, type: 3}
   NAgents: 0
   width: 0
