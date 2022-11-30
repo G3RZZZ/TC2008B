@@ -199,14 +199,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 136675311}
-  m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: 12, y: 10, z: -1.5}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 11.5, y: 25, z: 12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &395527429
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +337,7 @@ MonoBehaviour:
   - {fileID: 1394390208968329486, guid: 5eaf042a6c822d4408dc85a1ac7bcf72, type: 3}
   semaphore1Prefab: {fileID: 6825790008072082460, guid: bff2466687936d843b38589bbc0bdf56, type: 3}
   semaphore2Prefab: {fileID: 6825790008072082460, guid: bff2466687936d843b38589bbc0bdf56, type: 3}
+  destination: {fileID: 8936202913776899102, guid: 9123808d9202e904fa296e24fc5e9453, type: 3}
   tileSize: 1
 --- !u!4 &1457529884
 Transform:
@@ -453,7 +454,7 @@ MonoBehaviour:
   NAgents: 0
   width: 0
   height: 0
-  timeToUpdate: 1
+  timeToUpdate: 0.2
 --- !u!4 &1916692136
 Transform:
   m_ObjectHideFlags: 0

@@ -182,13 +182,13 @@ class Car(Agent):
               move_space = space
           
           
-          if move_space:
+          if move_space and self.timer > 2:
             self.previous_pos = self.pos
             self.model.grid.move_agent(self, space)
             self.route.remove(next_route)
             return
           
-        if len(steps_ahead) > 0:
+        if len(steps_ahead) > 0 and self.timer > 2:
           self.route = self.calculateRoute()
         
 
@@ -374,7 +374,7 @@ class RandomModel(Model):
     def step(self):
         '''Advance the model by one step.'''
 
-        if self.schedule.steps % 5 == 0:
+        if self.schedule.steps % 1 == 0:
           for corner in self.corners:
             add = True
             for contents in self.grid.get_cell_list_contents(corner):
