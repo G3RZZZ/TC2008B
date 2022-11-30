@@ -91,14 +91,20 @@ class RandomModel(Model):
     def step(self):
         '''Advance the model by one step.'''
 
-        if self.schedule.steps % 5 == 0:
+        if self.schedule.steps % 1 == 0:
           for corner in self.corners:
-            map_copy = self.map.copy()
-            random_destination = round(self.random.random()*self.N_destinations)
-            map_copy[self.destinations[random_destination]] = Node(self.destinations[random_destination])
-            agent = Car(f"{self.schedule.steps}car{corner}", self, self.destinations[random_destination], map_copy)
-            self.grid.place_agent(agent, corner)
-            self.schedule.add(agent)
+            add = True
+            for contents in self.grid.get_cell_list_contents(corner):
+              if isinstance(contents, Car):
+                print("hihi")
+                add = False
+            if add: 
+              map_copy = self.map.copy()
+              random_destination = round(self.random.random()*self.N_destinations)
+              map_copy[self.destinations[random_destination]] = Node(self.destinations[random_destination])
+              agent = Car(f"{self.schedule.steps}car{corner}", self, self.destinations[random_destination], map_copy)
+              self.grid.place_agent(agent, corner)
+              self.schedule.add(agent)
         if self.schedule.steps % 10 == 0:
             for agent in self.traffic_lights:
                 agent.state = not agent.state

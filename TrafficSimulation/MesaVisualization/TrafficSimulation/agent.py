@@ -1,14 +1,5 @@
 from mesa import Agent
 
-class Node():
-  pos = None
-  parent = None
-  f = 0
-  g = 0
-  h = 0
-  def __init__(self, pos):
-     self.pos = pos
-
 
 class Car(Agent):
     """
@@ -145,40 +136,59 @@ class Car(Agent):
 
         xAxis = True if direction == "Left" or direction == "Right" else False
         for space in surroundings:
-          if space in self.map:
+          if space in self.map and space != self.previous_pos:
             if xAxis:
-              if space[0]*sign >= pos[0]*sign:
+              if space[0]*sign > pos[0]*sign:
                 if not ((self.map[space].direction == "Down" and space[1] > pos[1]) or (self.map[space].direction == "Up" and space[1] < pos[1])):
                   possible_steps.append(space)
 
             else:
-              if space[1]*sign >= pos[1]*sign:
+              if space[1]*sign > pos[1]*sign:
                 if not ((self.map[space].direction == "Left" and space[0] > pos[0]) or (self.map[space].direction == "Right" and space[0] < pos[0])):
                   possible_steps.append(space)
         
         return possible_steps
 
+    def check_deviation(self, space, route_space):
+      xd = abs(space[0] - route_space[0])
+      yd = abs(space[1] - route_space[1])
+
+      if xd > 1 or yd > 1:
+        return False
+      return True
+
     def move(self, steps_ahead):
         """ 
         Determines if the agent can move in the direction that was chosen
         """
-        route = self.route[0]   
-        curr_distance = self.diagonalDistance(self.pos, self.destination)     
+
+        next_route = self.route[0]
+        route = self.route   
+        # curr_distance = self.diagonalDistance(self.pos, self.destination)     
         for space in steps_ahead:
-            if space == route:
+            if space in self.route:
               self.previous_pos = self.pos
               self.model.grid.move_agent(self, space)
-              self.route.remove(space)
+              self.route = route[route.index(space)+1:]
               return
-        
-        for space in steps_ahead:
-          new_distance = self.diagonalDistance(space, self.destination)
-          if new_distance < curr_distance:
-            print(new_distance, curr_distance)
+
+        if len(self.route) > 3:
+          move_space = None
+          low_distance = float("inf")
+          for space in steps_ahead:
+            curr_distance = self.diagonalDistance(space, self.destination)
+            if curr_distance < low_distance and self.check_deviation(space, next_route):
+              move_space = space
+          
+          
+          if move_space:
             self.previous_pos = self.pos
             self.model.grid.move_agent(self, space)
-            self.route = self.calculateRoute()
+            self.route.remove(next_route)
             return
+          
+        if len(steps_ahead) > 0:
+          self.route = self.calculateRoute()
         
 
 
@@ -193,13 +203,14 @@ class Car(Agent):
           steps_ahead = self.checkSensors()
           if self.route == None:
             self.route = self.calculateRoute()
-          if self.pos == self.previous_pos:
-            self.timer += 1
-          if self.timer > 20:
+          elif self.timer > 20:
             self.route = self.calculateRoute()
           else:
             self.move(steps_ahead)
             self.timer = 0
+
+          if self.pos == self.previous_pos:
+            self.timer += 1
 
 class Traffic_Light(Agent):
     """
