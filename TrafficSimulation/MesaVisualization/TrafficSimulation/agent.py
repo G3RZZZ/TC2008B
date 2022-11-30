@@ -145,7 +145,7 @@ class Car(Agent):
 
         xAxis = True if direction == "Left" or direction == "Right" else False
         for space in surroundings:
-          if space in self.map:
+          if space in self.map and space != self.previous_pos:
             if xAxis:
               if space[0]*sign >= pos[0]*sign:
                 if not ((self.map[space].direction == "Down" and space[1] > pos[1]) or (self.map[space].direction == "Up" and space[1] < pos[1])):
@@ -158,12 +158,21 @@ class Car(Agent):
         
         return possible_steps
 
+    def check_deviation(self, space, route_space):
+      xd = abs(space[0] - route_space[0])
+      yd = abs(space[1] - route_space[1])
+
+      if xd > 1 or yd > 1:
+        return False
+      return True
+
     def move(self, steps_ahead):
         """ 
         Determines if the agent can move in the direction that was chosen
         """
+
         route = self.route[0]   
-        curr_distance = self.diagonalDistance(self.pos, self.destination)     
+        # curr_distance = self.diagonalDistance(self.pos, self.destination)     
         for space in steps_ahead:
             if space == route:
               self.previous_pos = self.pos
@@ -172,13 +181,16 @@ class Car(Agent):
               return
         
         for space in steps_ahead:
-          new_distance = self.diagonalDistance(space, self.destination)
-          if new_distance < curr_distance:
-            print(new_distance, curr_distance)
+          # new_distance = self.diagonalDistance(space, self.destination)
+          if self.check_deviation(space, route):
             self.previous_pos = self.pos
             self.model.grid.move_agent(self, space)
-            self.route = self.calculateRoute()
+            if len(self.route) != 1:
+              self.route.remove(route)
             return
+        
+        if len(steps_ahead) > 0:
+          self.route = None
         
 
 
@@ -193,10 +205,10 @@ class Car(Agent):
           steps_ahead = self.checkSensors()
           if self.route == None:
             self.route = self.calculateRoute()
-          if self.pos == self.previous_pos:
-            self.timer += 1
-          if self.timer > 20:
-            self.route = self.calculateRoute()
+          # if self.pos == self.previous_pos:
+          #   self.timer += 1
+          # if self.timer > 20:
+          #   self.route = self.calculateRoute()
           else:
             self.move(steps_ahead)
             self.timer = 0
