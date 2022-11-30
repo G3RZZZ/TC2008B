@@ -26,7 +26,6 @@ def initModel():
         height = int(request.form.get('height'))
         currentStep = 0
 
-        print(request.form)
         randomModel = RandomModel(number_agents)
 
         return jsonify({"message":"Parameters recieved, model initiated."})
@@ -36,7 +35,7 @@ def getAgents():
     global randomModel
 
     if request.method == 'GET':
-        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, Car)]
+        agentPositions = [{"id": str(agent.unique_id), "x": x, "y":0, "z":z, "arrived": agent.arrived} for (contents, x, z) in randomModel.grid.coord_iter() for agent in contents if isinstance(agent, Car)]
 
         return jsonify({'positions':agentPositions})
 

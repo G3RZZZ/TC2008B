@@ -14,13 +14,15 @@ public class AgentData
 {
     public string id;
     public float x, y, z;
+    public bool arrived;
 
-    public AgentData(string id, float x, float y, float z)
+    public AgentData(string id, float x, float y, float z, bool arrived)
     {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.arrived = arrived;
     }
 }
 
@@ -47,7 +49,8 @@ public class AgentController : MonoBehaviour
 
     bool updated = false, started = false;
 
-    public GameObject agentPrefab, agentPrefab2;
+    [SerializeField] List<GameObject> prefabList = new List<GameObject>();
+    public GameObject agentPrefab;
     public int NAgents, width, height;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
@@ -153,22 +156,32 @@ public class AgentController : MonoBehaviour
 
             foreach(AgentData agent in agentsData.positions)
             {
-                Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
-                    Debug.Log(started);
-                    if(!prevPositions.ContainsKey(agent.id))
-                    {
-                        Debug.Log(agent.id);
-                        prevPositions[agent.id] = newAgentPosition;
-                        Debug.Log(prevPositions[agent.id]);
-                        agents[agent.id] = Instantiate(agentPrefab, newAgentPosition, Quaternion.identity);
-                    }
-                    else
-                    {
-                        Vector3 currentPosition = new Vector3();
-                        if(currPositions.TryGetValue(agent.id, out currentPosition))
-                            prevPositions[agent.id] = currentPosition;
-                        currPositions[agent.id] = newAgentPosition;
-                    }
+                Debug.Log(agent.arrived);
+                if (agent.arrived && prevPositions.ContainsKey(agent.id))
+                {
+                  prevPositions.Remove(agent.id);
+                  currPositions.Remove(agent.id);
+                  Destroy(agents[agent.id]);
+                  agents.Remove(agent.id);
+                } else
+                {  
+                  Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
+                      if(!prevPositions.ContainsKey(agent.id))
+                      {
+                          prevPositions[agent.id] = newAgentPosition;
+                          Debug.Log(prevPositions[agent.id]);
+                          int prefabIndex = UnityEngine.Random.Range(0,prefabList.Count);
+                          GameObject chosenPrefab = prefabList[prefabIndex];
+                          agents[agent.id] = Instantiate(chosenPrefab, newAgentPosition, Quaternion.identity);
+                      }
+                      else
+                      {
+                          Vector3 currentPosition = new Vector3();
+                          if(currPositions.TryGetValue(agent.id, out currentPosition))
+                              prevPositions[agent.id] = currentPosition;
+                          currPositions[agent.id] = newAgentPosition;
+                      }
+                }
             }
 
             updated = true;
