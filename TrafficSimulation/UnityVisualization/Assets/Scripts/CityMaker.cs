@@ -9,6 +9,7 @@ public class CityMaker : MonoBehaviour
     [SerializeField] List<GameObject> BuildingList = new List<GameObject>();
     [SerializeField] GameObject semaphore1Prefab;
     [SerializeField] GameObject semaphore2Prefab;
+    [SerializeField] GameObject destination;
     public Dictionary<Vector3, GameObject> tile_lights;
 
     [SerializeField] int tileSize;
@@ -68,8 +69,8 @@ public class CityMaker : MonoBehaviour
                 x += 1;
             } else if (tiles[i] == 'D') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
-                tile = Instantiate(BuildingList[0], position, Quaternion.Euler(0, 90, 0));
-                tile.GetComponent<Renderer>().materials[0].color = Color.blue;
+                tile = Instantiate(destination, position, Quaternion.Euler(0, 90, 0));
+                // tile.GetComponent<Renderer>().materials[0].color = Color.blue;
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
