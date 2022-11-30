@@ -332,8 +332,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layout: {fileID: 4900000, guid: 1bd49f2e04cdbec48bb774669bd2140d, type: 3}
   roadPrefab: {fileID: 3240343348373693069, guid: 646fc54ff3078ce94bbdbd0f0d4c4a05, type: 3}
-  building1Prefab: {fileID: 4451725452110524217, guid: 657f6680705219d4f8f6ad4d51d53fa7, type: 3}
-  building2Prefab: {fileID: 4451725452110524217, guid: 657f6680705219d4f8f6ad4d51d53fa7, type: 3}
+  BuildingList:
+  - {fileID: 4451725452110524217, guid: 657f6680705219d4f8f6ad4d51d53fa7, type: 3}
+  - {fileID: 1394390208968329486, guid: 5eaf042a6c822d4408dc85a1ac7bcf72, type: 3}
   semaphore1Prefab: {fileID: 6825790008072082460, guid: bff2466687936d843b38589bbc0bdf56, type: 3}
   semaphore2Prefab: {fileID: 6825790008072082460, guid: bff2466687936d843b38589bbc0bdf56, type: 3}
   tileSize: 1
@@ -443,8 +444,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983bc179e80f15347a79dd7b044746e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cityGameObject: {fileID: 1457529882}
+  prefabList:
+  - {fileID: 8502160689449482360, guid: 17124440c101ab84e8ddda6f0b647fae, type: 3}
+  - {fileID: 3968242763327026236, guid: 538dcd1611122c84cbee84ff93d94d9d, type: 3}
+  - {fileID: 3654926467283921634, guid: 343fc0fde65f74c42b1d3f3f967d75ff, type: 3}
   agentPrefab: {fileID: 8502160689449482360, guid: 17124440c101ab84e8ddda6f0b647fae, type: 3}
-  agentPrefab2: {fileID: 0}
   NAgents: 0
   width: 0
   height: 0

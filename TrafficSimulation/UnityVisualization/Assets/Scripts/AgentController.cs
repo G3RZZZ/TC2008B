@@ -27,6 +27,23 @@ public class AgentData
 }
 
 [Serializable]
+public class TLightData
+{
+    public string id;
+    public bool state;
+    public float x, y, z;
+
+    public TLightData(string id, float x, float y, float z, bool state)
+    {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.state = state;
+    }
+}
+
+[Serializable]
 
 public class AgentsData
 {
@@ -35,20 +52,33 @@ public class AgentsData
     public AgentsData() => this.positions = new List<AgentData>();
 }
 
+[Serializable]
+
+public class TLightsData
+{
+    public List<TLightData> tLightsState;
+
+    public TLightsData() => this.tLightsState = new List<TLightData>();
+}
+
+
 public class AgentController : MonoBehaviour
 {
     // private string url = "https://agents.us-south.cf.appdomain.cloud/";
     string serverUrl = "http://localhost:8585";
     string getAgentsEndpoint = "/getAgents";
-    string getObstaclesEndpoint = "/getObstacles";
+    string getTLightsEndpoint = "/getTrafficLight";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
-    AgentsData agentsData, obstacleData;
+    AgentsData agentsData;
+    TLightsData tlightsdata;
     Dictionary<string, GameObject> agents;
+    Dictionary<string, GameObject> tlights;
     Dictionary<string, Vector3> prevPositions, currPositions;
 
-    bool updated = false, started = false;
-
+    bool carUpdated = false, tLightUpdated = false;
+    [SerializeField] GameObject cityGameObject;
+    CityMaker city;
     [SerializeField] List<GameObject> prefabList = new List<GameObject>();
     public GameObject agentPrefab;
     public int NAgents, width, height;
@@ -58,12 +88,15 @@ public class AgentController : MonoBehaviour
     void Start()
     {
         agentsData = new AgentsData();
-        obstacleData = new AgentsData();
+        tlightsdata = new TLightsData();
 
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
 
         agents = new Dictionary<string, GameObject>();
+        tlights = new Dictionary<string, GameObject>();
+
+        city = cityGameObject.GetComponent(typeof(CityMaker)) as CityMaker;
 
         // floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
         // floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
@@ -78,11 +111,12 @@ public class AgentController : MonoBehaviour
         if(timer < 0)
         {
             timer = timeToUpdate;
-            updated = false;
+            carUpdated = false;
+            tLightUpdated = false;
             StartCoroutine(UpdateSimulation());
         }
 
-        if (updated)
+        if (carUpdated && tLightUpdated)
         {
             timer -= Time.deltaTime;
             dt = 1.0f - (timer / timeToUpdate);
@@ -114,6 +148,7 @@ public class AgentController : MonoBehaviour
         else 
         {
             StartCoroutine(GetAgentsData());
+            StartCoroutine(GetTrafficLightData());
         }
     }
 
@@ -139,7 +174,7 @@ public class AgentController : MonoBehaviour
             Debug.Log("Configuration upload complete!");
             Debug.Log("Getting Agents positions");
             StartCoroutine(GetAgentsData());
-            // StartCoroutine(GetObstacleData());
+            StartCoroutine(GetTrafficLightData());
         }
     }
 
@@ -156,7 +191,6 @@ public class AgentController : MonoBehaviour
 
             foreach(AgentData agent in agentsData.positions)
             {
-                Debug.Log(agent.arrived);
                 if (agent.arrived && prevPositions.ContainsKey(agent.id))
                 {
                   prevPositions.Remove(agent.id);
@@ -169,7 +203,6 @@ public class AgentController : MonoBehaviour
                       if(!prevPositions.ContainsKey(agent.id))
                       {
                           prevPositions[agent.id] = newAgentPosition;
-                          Debug.Log(prevPositions[agent.id]);
                           int prefabIndex = UnityEngine.Random.Range(0,prefabList.Count);
                           GameObject chosenPrefab = prefabList[prefabIndex];
                           agents[agent.id] = Instantiate(chosenPrefab, newAgentPosition, Quaternion.identity);
@@ -184,27 +217,37 @@ public class AgentController : MonoBehaviour
                 }
             }
 
-            updated = true;
+            carUpdated = true;
         }
     }
 
-    // IEnumerator GetObstacleData() 
-    // {
-    //     UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
-    //     yield return www.SendWebRequest();
+    IEnumerator GetTrafficLightData() 
+    {
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTLightsEndpoint);
+        yield return www.SendWebRequest();
  
-    //     if (www.result != UnityWebRequest.Result.Success)
-    //         Debug.Log(www.error);
-    //     else 
-    //     {
-    //         obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+        if (www.result != UnityWebRequest.Result.Success)
+            Debug.Log(www.error);
+        else 
+        {
+            tlightsdata = JsonUtility.FromJson<TLightsData>(www.downloadHandler.text);
 
-    //         Debug.Log(obstacleData.positions);
+            foreach(TLightData tlight in tlightsdata.tLightsState)
+            {
+                Vector3 lightPos = new Vector3(tlight.x, tlight.y, tlight.z);
+                GameObject light = city.tile_lights[lightPos];
+                Light actual_light = light.GetComponentInChildren(typeof(Light)) as Light;
+                if (tlight.state)
+                {
+                  actual_light.color = Color.green;
+                  
+                } else
+                {
+                  actual_light.color = Color.red;
+                }
+            }
+          tLightUpdated = true;
+        }
 
-    //         foreach(AgentData obstacle in obstacleData.positions)
-    //         {
-    //             Instantiate(obstaclePrefab, new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
-    //         }
-    //     }
-    // }
+      }
 }
