@@ -24,6 +24,7 @@ class Car(Agent):
         self.previous_pos = None
         self.map = city_map
         self.route  = None
+        self.deviate = False
         self.arrived = False
 
     def calculateRoute(self):
@@ -34,12 +35,12 @@ class Car(Agent):
         startNode = self.pos
         finishNode = self.destination
 
-        successors = self.getAheadSpaces(self.map[self.pos].direction, self.pos)
+        # successors = self.getAheadSpaces(self.map[self.pos].direction, self.pos)
         
-        for successor in successors:
-          for contents in self.model.grid.get_cell_list_contents(successors):
-              if isinstance(contents, Car) or isinstance(contents, Obstacle):
-                blocked.append(successor)   
+        # for successor in successors:
+        #   for contents in self.model.grid.get_cell_list_contents(successors):
+        #       if isinstance(contents, Car) or isinstance(contents, Obstacle):
+        #         blocked.append(successor)   
         
         not_visited.append(startNode)
 
@@ -51,8 +52,8 @@ class Car(Agent):
           visited.append(chosenNode)
           not_visited.remove(chosenNode)
           
-          if not successors:
-            successors = self.getAheadSpaces(self.map[chosenNode].direction, self.map[chosenNode].pos)
+          # if not successors:
+          successors = self.getAheadSpaces(self.map[chosenNode].direction, self.map[chosenNode].pos)
 
           for successor in successors:
             add = True
@@ -93,7 +94,10 @@ class Car(Agent):
         route.append(current_node.pos)
         route.reverse()
 
-        return route
+        if len(route) > 0:
+          return route
+        else:
+          return self.route
 
     def diagonalDistance(self, current, finish):
         dx = abs(current[0] - finish[0])
@@ -107,6 +111,11 @@ class Car(Agent):
     def checkSensors(self):
         
         steps_ahead = self.getAheadSpaces(self.map[self.pos].direction, self.pos)
+        xAxis = True if self.map[self.pos].direction == "Left" or self.map[self.pos].direction == "Right" else False
+        x, y = self.pos
+        side1 = (x, y + 1) if xAxis else (x + 1, y)
+        side2 = (x, y - 1) if xAxis else (x - 1, y)
+
         availability = []
         for step in steps_ahead:
           free = True 
@@ -116,6 +125,24 @@ class Car(Agent):
             if isinstance(contents, Traffic_Light):
               if not contents.state:
                 free = False
+            if xAxis:
+              if step[1] == y + 1:
+                for side in self.model.grid.get_cell_list_contents(side1):
+                  if isinstance(side, Car):
+                    free = False
+              elif step[1] == y - 1:
+                for side in self.model.grid.get_cell_list_contents(side2):
+                  if isinstance(side, Car):
+                    free = False
+            else:
+              if step[0] == x + 1:
+                for side in self.model.grid.get_cell_list_contents(side1):
+                  if isinstance(side, Car):
+                    free = False
+              elif step[0] == x - 1:
+                for side in self.model.grid.get_cell_list_contents(side2):
+                  if isinstance(side, Car):
+                    free = False
 
           availability.append(free)
 
@@ -168,28 +195,35 @@ class Car(Agent):
         # curr_distance = self.diagonalDistance(self.pos, self.destination)     
         for space in steps_ahead:
             if space in self.route:
-              self.previous_pos = self.pos
+              self.deviate = False
               self.model.grid.move_agent(self, space)
               self.route = route[route.index(space)+1:]
               return
 
-        if len(self.route) > 3:
-          move_space = None
-          low_distance = float("inf")
-          for space in steps_ahead:
-            curr_distance = self.diagonalDistance(space, self.destination)
-            if curr_distance < low_distance and self.check_deviation(space, next_route):
-              move_space = space
+        if self.timer > 2:
+          self.deviate = True
+
+        move_space = None
+        low_distance = float("inf")
+        for space in steps_ahead:
+          curr_distance = self.diagonalDistance(space, self.destination)
+          if curr_distance < low_distance:
+            if self.check_deviation(space, next_route):
+              move_space = space;
+              break;
+            else:
+              move_space = space;
           
-          
-          if move_space and self.timer > 2:
-            self.previous_pos = self.pos
-            self.model.grid.move_agent(self, space)
+        if move_space and self.deviate:
+          if len(self.route) > 3:
+            self.model.grid.move_agent(self, move_space)
             self.route.remove(next_route)
             return
+          else:
+            self.model.grid.move_agent(self, move_space)
           
-        if len(steps_ahead) > 0 and self.timer > 2:
-          self.route = self.calculateRoute()
+        # if self.deviate and len(steps_ahead) > 0:
+        #   self.route = self.calculateRoute()
         
 
 
@@ -197,6 +231,8 @@ class Car(Agent):
         """ 
         Determines the new direction it will take, and then moves
         """
+
+        self.previous_pos = self.pos
         if self.pos == self.destination:
             if self.arrived:
               self.model.grid.remove_agent(self)
@@ -206,14 +242,16 @@ class Car(Agent):
           steps_ahead = self.checkSensors()
           if self.route == None:
             self.route = self.calculateRoute()
-          elif self.timer > 20:
+          elif self.timer > 20 and len(steps_ahead) > 0:
             self.route = self.calculateRoute()
+            self.timer = 0
           else:
             self.move(steps_ahead)
-            self.timer = 0
 
           if self.pos == self.previous_pos:
             self.timer += 1
+          else:
+            self.timer = 0
 
 class Traffic_Light(Agent):
     """
