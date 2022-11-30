@@ -205,13 +205,14 @@ class Car(Agent):
           steps_ahead = self.checkSensors()
           if self.route == None:
             self.route = self.calculateRoute()
-          # if self.pos == self.previous_pos:
-          #   self.timer += 1
-          # if self.timer > 20:
-          #   self.route = self.calculateRoute()
+          elif self.timer > 20:
+            self.route = self.calculateRoute()
           else:
             self.move(steps_ahead)
             self.timer = 0
+            
+          if self.pos == self.previous_pos:
+            self.timer += 1
 
 class Traffic_Light(Agent):
     """
