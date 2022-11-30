@@ -5,18 +5,4 @@
 A través de este proyecto se busca crear una simulación de una ciudad y su flujo de tráfico. 
 Este repositorio contiene un proyecto en Unity en el cual se desarrollará la simulación
 
-### Agentes involucrados en el proyecto:
--	Auto
-    - El auto navega las calles del mapa, respetando los semáforos y la dirección de circulación, hasta llegar a su destino por el camino elegido.
--	Semáforo
-    - Alternando entre verde y rojo, señaliza el siga y el alto a los autos.
--	Destino
-    - Punto final que alcanza el auto para salir de la circulación del mapa.
--   Calle
-    - Marca y delimita el mapa, indicando la dirección de circulación a los autos.
--   Obstáculos
-    - Conforman las manzanas de edificios en el mapa adicionalmente a los Destinos.
 
-### Pasos para ejecutar simulación
-
-...
