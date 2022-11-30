@@ -1,14 +1,5 @@
 from mesa import Agent
 
-class Node():
-  pos = None
-  parent = None
-  f = 0
-  g = 0
-  h = 0
-  def __init__(self, pos):
-     self.pos = pos
-
 
 class Car(Agent):
     """
@@ -210,7 +201,7 @@ class Car(Agent):
           else:
             self.move(steps_ahead)
             self.timer = 0
-            
+
           if self.pos == self.previous_pos:
             self.timer += 1
 

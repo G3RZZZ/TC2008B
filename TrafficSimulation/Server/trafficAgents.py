@@ -1,15 +1,5 @@
 from mesa import Agent
 
-class Node():
-  pos = None
-  parent = None
-  f = 0
-  g = 0
-  h = 0
-  def __init__(self, pos):
-     self.pos = pos
-
-
 class Car(Agent):
     """
     Agent that moves randomly.
@@ -145,7 +135,7 @@ class Car(Agent):
 
         xAxis = True if direction == "Left" or direction == "Right" else False
         for space in surroundings:
-          if space in self.map:
+          if space in self.map and space != self.previous_pos:
             if xAxis:
               if space[0]*sign >= pos[0]*sign:
                 if not ((self.map[space].direction == "Down" and space[1] > pos[1]) or (self.map[space].direction == "Up" and space[1] < pos[1])):
@@ -158,12 +148,21 @@ class Car(Agent):
         
         return possible_steps
 
+    def check_deviation(self, space, route_space):
+      xd = abs(space[0] - route_space[0])
+      yd = abs(space[1] - route_space[1])
+
+      if xd > 1 or yd > 1:
+        return False
+      return True
+
     def move(self, steps_ahead):
         """ 
         Determines if the agent can move in the direction that was chosen
         """
+
         route = self.route[0]   
-        curr_distance = self.diagonalDistance(self.pos, self.destination)     
+        # curr_distance = self.diagonalDistance(self.pos, self.destination)     
         for space in steps_ahead:
             if space == route:
               self.previous_pos = self.pos
@@ -172,13 +171,16 @@ class Car(Agent):
               return
         
         for space in steps_ahead:
-          new_distance = self.diagonalDistance(space, self.destination)
-          if new_distance < curr_distance:
-            print(new_distance, curr_distance)
+          # new_distance = self.diagonalDistance(space, self.destination)
+          if self.check_deviation(space, route):
             self.previous_pos = self.pos
             self.model.grid.move_agent(self, space)
-            self.route = self.calculateRoute()
+            if len(self.route) != 1:
+              self.route.remove(route)
             return
+        
+        if len(steps_ahead) > 0:
+          self.route = None
         
 
 
@@ -193,13 +195,14 @@ class Car(Agent):
           steps_ahead = self.checkSensors()
           if self.route == None:
             self.route = self.calculateRoute()
-          if self.pos == self.previous_pos:
-            self.timer += 1
-          if self.timer > 20:
+          elif self.timer > 20:
             self.route = self.calculateRoute()
           else:
             self.move(steps_ahead)
             self.timer = 0
+            
+          if self.pos == self.previous_pos:
+            self.timer += 1
 
 class Traffic_Light(Agent):
     """
@@ -267,10 +270,11 @@ class Road(Agent):
 
 
 
+
 from mesa import Model
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
-# from agent import *
+from agent import *
 import json
 
 class Node():
@@ -360,14 +364,19 @@ class RandomModel(Model):
     def step(self):
         '''Advance the model by one step.'''
 
-        if self.schedule.steps % 5 == 0:
+        if self.schedule.steps % 1 == 0:
           for corner in self.corners:
-            map_copy = self.map.copy()
-            random_destination = round(self.random.random()*self.N_destinations)
-            map_copy[self.destinations[random_destination]] = Node(self.destinations[random_destination])
-            agent = Car(f"{self.schedule.steps}car{corner}", self, self.destinations[random_destination], map_copy)
-            self.grid.place_agent(agent, corner)
-            self.schedule.add(agent)
+            add = True
+            for contents in self.grid.get_cell_list_contents(corner):
+              if isinstance(contents, Car):
+                add = False
+            if add: 
+              map_copy = self.map.copy()
+              random_destination = round(self.random.random()*self.N_destinations)
+              map_copy[self.destinations[random_destination]] = Node(self.destinations[random_destination])
+              agent = Car(f"{self.schedule.steps}car{corner}", self, self.destinations[random_destination], map_copy)
+              self.grid.place_agent(agent, corner)
+              self.schedule.add(agent)
         if self.schedule.steps % 10 == 0:
             for agent in self.traffic_lights:
                 agent.state = not agent.state
