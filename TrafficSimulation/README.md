@@ -14,7 +14,7 @@
     - Conforman las manzanas de edificios en el mapa adicionalmente a los Destinos.
 
 
-        <br><br>![alt-text](..\Documentation\TrafficGif.gif)<br><br>
+        <br><br>![alt-text](https://github.com/G3RZZZ/TC2008B/blob/main/Documentation/TrafficGif.gif)<br><br>
 
 
 ## Pasos de Ejecución
