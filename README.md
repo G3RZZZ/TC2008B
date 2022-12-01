@@ -9,11 +9,11 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
 
 - BlenderModels
 
-	Archivos de Blender de los modelos usados en las simulaciónes de Unity de BoxBot y TrafficSimulation.
+	Archivos de Blender de los modelos usados en las simulaciones de Unity de BoxBot y TrafficSimulation.
 	
 - BoxBot
 
-	Simulaciónes en Unity y Mesa de la Actividad Integradora 1, al igual que su respectiva documentación.
+	Simulaciones en Unity y Mesa de la Actividad Integradora 1, al igual que su respectiva documentación.
 	Para Unity, el folder 'UnityVisualization'. 
 	Para Mesa, el folder 'WebServerVisualization'.
 	
@@ -23,8 +23,8 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
 	
 - TrafficSimulation
 
-	Simulaciónes de tráfico en Unity y Mesa.
-	Para Unity, los folder 'Server' y 'UnityVisualization' son necesarios.
+	Simulaciones de tráfico en Unity y Mesa.
+	Para Unity, los folders 'Server' y 'UnityVisualization' son necesarios.
 	Para Mesa, el folder 'MesaVisualization/TrafficSimulation'.
 	
 	
