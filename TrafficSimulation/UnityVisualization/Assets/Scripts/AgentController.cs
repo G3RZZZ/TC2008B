@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 [Serializable]
 public class AgentData
@@ -84,11 +85,23 @@ public class AgentController : MonoBehaviour
     public int NAgents, width, height;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
+    private int total_agents, current_agents, done_agents;
+    [SerializeField] GameObject total_agents_text, current_agents_text, done_agents_text;
+    TMP_Text total_agents_tmp, current_agents_tmp, done_agents_tmp;
+    
 
     void Start()
     {
         agentsData = new AgentsData();
         tlightsdata = new TLightsData();
+
+        total_agents = 0;
+        current_agents = 0;
+        done_agents = 0;
+
+        total_agents_tmp = total_agents_text.GetComponent<TextMeshProUGUI>();
+        current_agents_tmp = current_agents_text.GetComponent<TextMeshProUGUI>();
+        done_agents_tmp = done_agents_text.GetComponent<TextMeshProUGUI>();
 
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
@@ -108,6 +121,8 @@ public class AgentController : MonoBehaviour
 
     private void Update() 
     {
+        current_agents = prevPositions.Count;
+        done_agents = total_agents - current_agents;
         if(timer < 0)
         {
             timer = timeToUpdate;
@@ -136,6 +151,10 @@ public class AgentController : MonoBehaviour
             // float t = (timer / timeToUpdate);
             // dt = t * t * ( 3f - 2f*t);
         }
+
+        total_agents_tmp.SetText("Total agents: " + total_agents);
+        current_agents_tmp.SetText("Current Agents: " + current_agents);
+        done_agents_tmp.SetText("Done agents: " + done_agents);
     }
  
     IEnumerator UpdateSimulation()
@@ -206,6 +225,7 @@ public class AgentController : MonoBehaviour
                           int prefabIndex = UnityEngine.Random.Range(0,prefabList.Count);
                           GameObject chosenPrefab = prefabList[prefabIndex];
                           agents[agent.id] = Instantiate(chosenPrefab, newAgentPosition, Quaternion.identity);
+                          total_agents += 1;
                       }
                       else
                       {
