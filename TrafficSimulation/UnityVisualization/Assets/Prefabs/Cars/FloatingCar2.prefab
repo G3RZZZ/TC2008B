@@ -45,7 +45,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.07421358, g: 1.0000001, b: 1.0000001, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 80.46168
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -83,7 +83,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -139,7 +139,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 41.268604
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -177,7 +177,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -233,7 +233,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.07421358, g: 1.0000001, b: 1.0000001, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 80.46168
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -271,7 +271,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -327,7 +327,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.07421358, g: 1.0000001, b: 1.0000001, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 80.46168
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -365,7 +365,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -453,7 +453,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.07421358, g: 1.0000001, b: 1.0000001, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 80.46168
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -491,7 +491,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -644,7 +644,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 3
-  m_Range: 10
+  m_Range: 3
   m_SpotAngle: 41.268604
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -682,7 +682,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
