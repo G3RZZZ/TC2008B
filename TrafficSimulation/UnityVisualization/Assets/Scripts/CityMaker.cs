@@ -69,12 +69,16 @@ public class CityMaker : MonoBehaviour
                 x += 1;
             } else if (tiles[i] == 'D') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
+                tile.transform.parent = transform;
                 tile = Instantiate(destination, position, Quaternion.Euler(0, 90, 0));
                 // tile.GetComponent<Renderer>().materials[0].color = Color.blue;
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
+                tile.transform.parent = transform;
                 int prefabIndex = UnityEngine.Random.Range(0,BuildingList.Count);
                 GameObject chosenPrefab = BuildingList[prefabIndex];
                 tile = Instantiate(chosenPrefab, position, Quaternion.identity);
