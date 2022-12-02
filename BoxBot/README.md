@@ -29,9 +29,9 @@ Empleando texturas e iluminación en la representación de Unity
 
 3. Abrir un ambiente que contenga python 3.8, Flask y Mesa
 
-4. Inicializar servidor (archivo: TC2008B/BoxBot/UnityVizualization/Server/server.py)
+4. Inicializar servidor de la dirección '.../TC2008B/BoxBot/UnityVizualization/Server/' con el comando 'python server.py'
 
-5. Abrir proyecto en Unity (archivo: TC2008B/BoxBot/UnityVizualization/BotUnity/ )
+5. Abrir proyecto del folder '.../TC2008B/BoxBot/UnityVizualization/BotUnity/' en Unity
 
 6. Ejecutar simulación con botón 'play' de Unity.
 
