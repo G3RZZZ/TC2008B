@@ -15,6 +15,8 @@ Empleando texturas e iluminación en la representación de Unity
 
 2. Clonar el repositorio localmente.
 
+        git clone https://github.com/G3RZZZ/TC2008B
+
 3. Abrir un ambiente que contenga python 3.8 y Flask
     
     Usando Anaconda:

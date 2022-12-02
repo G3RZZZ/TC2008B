@@ -25,6 +25,8 @@
 
 2. Clonar el repositorio localmente.
 
+        git clone https://github.com/G3RZZZ/TC2008B
+
 3. Abrir un ambiente que contenga python 3.8, Flask, y Mesa
     
     Usando Anaconda:
