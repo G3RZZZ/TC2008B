@@ -28,7 +28,7 @@ def initModel():
 
         randomModel = RandomModel(number_agents)
 
-        return jsonify({"message":"Parameters recieved, model initiated."})
+        return jsonify({"message":"Parameters received, model initiated."})
 
 @app.route('/getAgents', methods=['GET'])
 def getAgents():
@@ -40,7 +40,7 @@ def getAgents():
         return jsonify({'positions':agentPositions})
 
 @app.route('/getTrafficLight', methods=['GET'])
-def ggetTrafficLight():
+def getTrafficLight():
     global randomModel
     if request.method == 'GET':
         tLightsState = [{"id": str(t.unique_id), "x": t.pos[0], "y":0, "z":t.pos[1], "state": t.state} for t in randomModel.traffic_lights]
