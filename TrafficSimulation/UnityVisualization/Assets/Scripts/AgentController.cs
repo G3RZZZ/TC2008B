@@ -1,6 +1,13 @@
 ﻿// TC2008B. Sistemas Multiagentes y Gráficas Computacionales
-// C# client to interact with Python. Based on the code provided by Sergio Ruiz.
+// 
+// Gerardo Gutiérrez Paniagua, A01029422
+// Mateo Herrera Lavalle A01751912
+// Francisco Daniel Salcedo Catalán A01633010
+// Regina Rodríguez Sánchez A01284329
+// 
+// Novimebre 2022
 // Octavio Navarro. October 2021
+// Python Server for Mesa web visualization
 
 using System;
 using System.Collections;
@@ -10,6 +17,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 
+
+// Class that will recieve car agent data
 [Serializable]
 public class AgentData
 {
@@ -27,6 +36,7 @@ public class AgentData
     }
 }
 
+// Class that recieves traffic light agent data
 [Serializable]
 public class TLightData
 {
@@ -44,8 +54,8 @@ public class TLightData
     }
 }
 
+// Class that contains list of car agent data
 [Serializable]
-
 public class AgentsData
 {
     public List<AgentData> positions;
@@ -53,8 +63,8 @@ public class AgentsData
     public AgentsData() => this.positions = new List<AgentData>();
 }
 
+// Class tthat contains a list of traffic light agent data
 [Serializable]
-
 public class TLightsData
 {
     public List<TLightData> tLightsState;
@@ -65,7 +75,7 @@ public class TLightsData
 
 public class AgentController : MonoBehaviour
 {
-    // private string url = "https://agents.us-south.cf.appdomain.cloud/";
+    // Declare variables
     string serverUrl = "http://localhost:8585";
     string getAgentsEndpoint = "/getAgents";
     string getTLightsEndpoint = "/getTrafficLight";
@@ -82,7 +92,7 @@ public class AgentController : MonoBehaviour
     CityMaker city;
     [SerializeField] List<GameObject> prefabList = new List<GameObject>();
     public GameObject agentPrefab;
-    public int NAgents, width, height;
+    public int NAgents;
     public float timeToUpdate = 5.0f;
     private float timer, dt;
     private int total_agents, current_agents, done_agents;
@@ -92,6 +102,7 @@ public class AgentController : MonoBehaviour
 
     void Start()
     {
+        // Initialize variables
         agentsData = new AgentsData();
         tlightsdata = new TLightsData();
 
@@ -111,18 +122,19 @@ public class AgentController : MonoBehaviour
 
         city = cityGameObject.GetComponent(typeof(CityMaker)) as CityMaker;
 
-        // floor.transform.localScale = new Vector3((float)width/10, 1, (float)height/10);
-        // floor.transform.localPosition = new Vector3((float)width/2-0.5f, 0, (float)height/2-0.5f);
-        
         timer = timeToUpdate;
 
         StartCoroutine(SendConfiguration());
     }
 
+    // Update position of car agents and call couroutine to update simulation
     private void Update() 
     {
+        // Calculate sdisplay statistics
         current_agents = prevPositions.Count;
         done_agents = total_agents - current_agents;
+        
+        // Check if time to update has finished and call update again
         if(timer < 0)
         {
             timer = timeToUpdate;
@@ -131,6 +143,7 @@ public class AgentController : MonoBehaviour
             StartCoroutine(UpdateSimulation());
         }
 
+        // Lerp car positions
         if (carUpdated && tLightUpdated)
         {
             timer -= Time.deltaTime;
@@ -152,11 +165,13 @@ public class AgentController : MonoBehaviour
             // dt = t * t * ( 3f - 2f*t);
         }
 
+        // Display statistics
         total_agents_tmp.SetText("Total agents: " + total_agents);
         current_agents_tmp.SetText("Current Agents: " + current_agents);
         done_agents_tmp.SetText("Done agents: " + done_agents);
     }
- 
+
+    // Coroutie that updates the simulation
     IEnumerator UpdateSimulation()
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + updateEndpoint);
@@ -171,13 +186,14 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutine that sends starting configuaration to model
     IEnumerator SendConfiguration()
     {
         WWWForm form = new WWWForm();
 
         form.AddField("NAgents", NAgents.ToString());
-        form.AddField("width", width.ToString());
-        form.AddField("height", height.ToString());
+        // form.AddField("width", width.ToString());
+        // form.AddField("height", height.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint, form);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -197,6 +213,7 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutine that fetches car agent data from server
     IEnumerator GetAgentsData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getAgentsEndpoint);
@@ -210,6 +227,8 @@ public class AgentController : MonoBehaviour
 
             foreach(AgentData agent in agentsData.positions)
             {
+                // If agent has arrived to destination, emove from dictionaries and delete agent
+                // else instantiate or change agent curr positions
                 if (agent.arrived && prevPositions.ContainsKey(agent.id))
                 {
                   prevPositions.Remove(agent.id);
@@ -241,6 +260,7 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    // Coroutine that fetches traffic light data and changes light in unity
     IEnumerator GetTrafficLightData() 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTLightsEndpoint);

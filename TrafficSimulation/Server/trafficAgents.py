@@ -1,6 +1,12 @@
-# Mateo Herrera Lavalle - A01751912
-# Gerardo Gutierrez Paniagua - A1029422
-
+# TC2008B. Sistemas Multiagentes y Gráficas Computacionales
+'''
+Gerardo Gutiérrez Paniagua, A01029422
+Mateo Herrera Lavalle A01751912
+Francisco Daniel Salcedo Catalán A01633010
+Regina Rodríguez Sánchez A01284329
+'''
+# Novimebre 2022
+# Octavio Navarro. October 2021
 
 # This script contains both the agent and model classes that define the simulation
 
