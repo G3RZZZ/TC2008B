@@ -1,9 +1,21 @@
+// TC2008B. Sistemas Multiagentes y Gráficas Computacionales
+// 
+// Gerardo Gutiérrez Paniagua, A01029422
+// Mateo Herrera Lavalle A01751912
+// Francisco Daniel Salcedo Catalán A01633010
+// Regina Rodríguez Sánchez A01284329
+// 
+// Novimebre 2022
+// Octavio Navarro. October 2021
+// Agent pot and get from server script
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CityMaker : MonoBehaviour
 {
+    // Declare variables
     [SerializeField] TextAsset layout;
     [SerializeField] GameObject roadPrefab;
     [SerializeField] List<GameObject> BuildingList = new List<GameObject>();
@@ -17,6 +29,7 @@ public class CityMaker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Initialize variables
         tile_lights = new Dictionary<Vector3, GameObject>();
         MakeTiles(layout.text);
     }
@@ -40,6 +53,7 @@ public class CityMaker : MonoBehaviour
         Vector3 position;
         GameObject tile;
 
+        // Read txt file and instantiate game objects
         for (int i=0; i<tiles.Length; i++) {
             if (tiles[i] == '>' || tiles[i] == '<') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);

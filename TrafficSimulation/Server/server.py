@@ -27,12 +27,12 @@ app = Flask("Traffic example")
 # init endpoint for map dimensions
 @app.route('/init', methods=['POST', 'GET'])
 def initModel():
-    global currentStep, randomModel, number_agents, width, height
+    global currentStep, randomModel, number_agents
 
     if request.method == 'POST':
         number_agents = int(request.form.get('NAgents'))
-        width = int(request.form.get('width'))
-        height = int(request.form.get('height'))
+        # width = int(request.form.get('width'))
+        # height = int(request.form.get('height'))
         currentStep = 0
 
         randomModel = RandomModel(number_agents)
