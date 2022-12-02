@@ -25,7 +25,7 @@
 
 2. Clonar el repositorio localmente.
 
-3. Abrir un ambiente que contenga python 3.8 y Flask
+3. Abrir un ambiente que contenga python 3.8, Flask, y Mesa
 
 4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\MesaVisualization\TrafficSimulation' con el comando 'python server.py'
 
