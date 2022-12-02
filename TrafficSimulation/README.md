@@ -21,24 +21,28 @@
 
 ### Pasos para ejecutar simulación en Mesa
 
-1. Clonar el repositorio localmente.
+1. Tener acceso a una herramienta Git.
 
-2. Abrir un ambiente que contenga python 3.8 y Flask
+2. Clonar el repositorio localmente.
 
-3. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\MesaVisualization\TrafficSimulation' con el comando 'python server.py'
+3. Abrir un ambiente que contenga python 3.8 y Flask
 
-4. Inicializar la simulación con el botón 'Start'
+4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\MesaVisualization\TrafficSimulation' con el comando 'python server.py'
+
+5. Inicializar la simulación con el botón 'Start'
 
 ### Pasos para ejecutar simulación en Unity
 
-1. Clonar el repositorio localmente.
+1.	Tener acceso a una herramienta Git.
 
-2. Abrir un ambiente que contenga python 3.8 y Flask
+2.  Clonar el repositorio localmente.
 
-3. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando 'python server.py'
+3.. Abrir un ambiente que contenga python 3.8 y Flask
 
-4. Abrir el proyecto 'UnityVisualization' en Unity ('...\TC2008B\TrafficSimulation\UnityVisualization')
+4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando 'python server.py'
 
-5. Con el proyecto abierto, abrir la escena 'BuildCity'
+5. Abrir el proyecto 'UnityVisualization' en Unity ('...\TC2008B\TrafficSimulation\UnityVisualization')
 
-6. Inicializar simulación con el botón Play.
+6. Con el proyecto abierto, abrir la escena 'BuildCity'
+
+7. Inicializar simulación con el botón Play.
