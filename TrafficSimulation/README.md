@@ -26,6 +26,13 @@
 2. Clonar el repositorio localmente.
 
 3. Abrir un ambiente que contenga python 3.8, Flask, y Mesa
+    
+    Usando Anaconda:
+
+    - ```conda create <nombre>```
+    - ```conda install python=3.8```
+    - ```pip install mesa```
+    - ```pip instal flask```
 
 4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\MesaVisualization\TrafficSimulation' con el comando 'python server.py'
 
@@ -37,12 +44,20 @@
 
 2.  Clonar el repositorio localmente.
 
-3.. Abrir un ambiente que contenga python 3.8 y Flask
+        git clone https://github.com/G3RZZZ/TC2008B
 
-4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando 'python server.py'
+3. Abrir un ambiente que contenga python 3.8 y Flask
+
+    Usando Anaconda:
+
+    -  ```conda create <nombre>```
+    -  ```conda install python=3.8```
+    - ```pip instal flask```
+
+4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando ```python server.py```
 
 5. Abrir el proyecto 'UnityVisualization' en Unity ('...\TC2008B\TrafficSimulation\UnityVisualization')
 
-6. Con el proyecto abierto, abrir la escena 'BuildCity'
+6. Con el proyecto abierto, abrir la escena ```BuildCity```
 
-7. Inicializar simulación con el botón Play.
+7. Inicializar simulación con el botón ```Play```.

@@ -16,24 +16,39 @@ Empleando texturas e iluminación en la representación de Unity
 2. Clonar el repositorio localmente.
 
 3. Abrir un ambiente que contenga python 3.8 y Flask
+    
+    Usando Anaconda:
 
-4. Ejecutar el servidor en la dirección '...\TC2008B\BoxBot\WebServerVizualization' con el comando 'python server.py'
+    - ```conda create <nombre>```
+    - ```conda install python=3.8```
+    - ```pip install mesa```
+    - ```pip instal flask```
 
-5. Inicializar la simulación con el botón 'Start'
+4. Ejecutar el servidor en la dirección '...\TC2008B\BoxBot\WebServerVizualization' con el comando ```python server.py```
+
+5. Inicializar la simulación con el botón ```Start```
 
 ### Pasos para ejecutar simulación en Unity
 
-1.	Tener acceso a una herramienta Git.
+1.	Tener acceso a una herramienta Git (Git cli o Github Desktop).
 
 2. Copiar repositorio de manera local.
 
-3. Abrir un ambiente que contenga python 3.8, Flask y Mesa
+        git clone https://github.com/G3RZZZ/TC2008B
 
-4. Inicializar servidor de la dirección '.../TC2008B/BoxBot/UnityVizualization/Server/' con el comando 'python server.py'
+3. Abrir un ambiente que contenga python 3.8, Flask
+
+    Usando Anaconda:
+
+    - ```conda create <nombre>```
+    - ```conda install python=3.8```
+    - ```pip instal flask```
+
+4. Inicializar servidor de la dirección '.../TC2008B/BoxBot/UnityVizualization/Server/' con el comando ```python server.py```
 
 5. Abrir proyecto del folder '.../TC2008B/BoxBot/UnityVizualization/BotUnity/' en Unity
 
-6. Ejecutar simulación con botón 'play' de Unity.
+6. Ejecutar simulación con botón ```Play``` de Unity.
 
 
 
