@@ -1,11 +1,19 @@
 # TC2008B. Sistemas Multiagentes y Gráficas Computacionales
-# Python flask server to interact with Unity. Based on the code provided by Sergio Ruiz.
+'''
+Gerardo Gutiérrez Paniagua, A01029422
+Mateo Herrera Lavalle A01751912
+Francisco Daniel Salcedo Catalán A01633010
+Regina Rodríguez Sánchez A01284329
+'''
+# Novimebre 2022
 # Octavio Navarro. October 2021
+
+# Python Server for Unity visualization
 
 from flask import Flask, request, jsonify
 from trafficAgents import *
 
-# Size of the board:
+# Size of the board and number of agents:
 number_agents = 10
 width = 28
 height = 28
@@ -16,6 +24,7 @@ app = Flask("Traffic example")
 
 # @app.route('/', methods=['POST', 'GET'])
 
+# init endpoint for map dimensions
 @app.route('/init', methods=['POST', 'GET'])
 def initModel():
     global currentStep, randomModel, number_agents, width, height
@@ -30,6 +39,7 @@ def initModel():
 
         return jsonify({"message":"Parameters received, model initiated."})
 
+# GET endpoint of the positions of agents
 @app.route('/getAgents', methods=['GET'])
 def getAgents():
     global randomModel
@@ -39,6 +49,7 @@ def getAgents():
 
         return jsonify({'positions':agentPositions})
 
+# GET endpoint for traffic light states, red or green
 @app.route('/getTrafficLight', methods=['GET'])
 def getTrafficLight():
     global randomModel
@@ -47,6 +58,7 @@ def getTrafficLight():
 
         return jsonify({'tLightsState':tLightsState})
 
+#GET endpoint for step updates in the model
 @app.route('/update', methods=['GET'])
 def updateModel():
     global currentStep, randomModel
@@ -55,5 +67,6 @@ def updateModel():
         currentStep += 1
         return jsonify({'message':f'Model updated to step {currentStep}.', 'currentStep':currentStep})
 
+# run server on localhost, port 8585
 if __name__=='__main__':
     app.run(host="localhost", port=8585, debug=True)
