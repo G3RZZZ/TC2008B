@@ -44,6 +44,7 @@ Empleando texturas e iluminación en la representación de Unity
 
     - ```conda create <nombre>```
     - ```conda install python=3.8```
+    - ```pip install mesa```
     - ```pip instal flask```
 
 4. Inicializar servidor de la dirección '.../TC2008B/BoxBot/UnityVizualization/Server/' con el comando ```python server.py```

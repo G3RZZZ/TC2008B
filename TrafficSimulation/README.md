@@ -54,6 +54,7 @@
 
     -  ```conda create <nombre>```
     -  ```conda install python=3.8```
+    - ```pip install mesa```
     - ```pip instal flask```
 
 4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando ```python server.py```
