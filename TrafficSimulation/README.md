@@ -37,7 +37,7 @@
 
 2.  Clonar el repositorio localmente.
 
-3.. Abrir un ambiente que contenga python 3.8 y Flask
+3. Abrir un ambiente que contenga python 3.8 y Flask
 
 4. Ejecutar el servidor en la dirección '...\TC2008B\TrafficSimulation\Server' con el comando 'python server.py'
 
