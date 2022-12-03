@@ -20,6 +20,8 @@ Este repositorio contiene un proyecto en Unity en el cual se desarrollará la si
 - Documentation
 
 	Archivos que corresponden a las Revisiónes 2 y 3. 
+	Archivo Evidenica 2 .
+	Video de manual de ejecución y funcionamiento.
 	
 - TrafficSimulation
 
