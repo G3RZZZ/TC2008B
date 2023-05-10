@@ -474,7 +474,7 @@ class RandomModel(Model):
     def step(self):
         '''Advance the model by one step.'''
 
-        if self.schedule.steps % 1 == 0:
+        if self.schedule.steps % 3 == 0:
           # Add car in corner each n steps if space is free
           for corner in self.corners:
             add = True
